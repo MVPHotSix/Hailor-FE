@@ -23,12 +23,12 @@ jobs:
         run: yarn build
 
       - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v2
+        uses: nwtgck/actions-netlify@v3.0
         with:
           publish-dir: './dist'
           production-branch: 'main'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "🚀 Deploy from GitHub Actions"
         env:
-          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
