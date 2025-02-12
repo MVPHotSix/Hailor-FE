@@ -1,7 +1,9 @@
-name: depoly to Netlify
+name: deploy to Netlify
 
 on:
-  - pull_request
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
