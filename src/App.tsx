@@ -11,7 +11,12 @@ import styled from 'styled-components'
 
 const Layout = styled.div`
     width: 100vw;
-    height: 100vh;
+
+    /* 데스크탑/태블릿 환경 스타일 (768px = 48rem, 500px = 31.25rem, 10px = 0.625rem) */
+    @media (min-width: 48rem) {
+        width: 31.25rem;
+        left: 50%;
+    }
 `
 
 function App() {

@@ -4,18 +4,17 @@ import Navigation from '../components/navigation'
 import styled from 'styled-components'
 
 const MainLayout = styled.div`
-    display: grid;
-    width: 100vw;
-    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     /* 헤더, 컨텐츠, 네비게이션 영역: 상단, 중간, 하단 */
-    grid-template-rows: auto 1fr auto;
 `
 
 const ContentLayout = styled.div`
     width: 100%;
-    height: 100%;
-    overflow-y: scroll;
-    padding: 16px;
+    min-height: 100vh;
+    margin-top: 3.5rem; /* Header 높이만큼 패딩 추가 */
+    margin-bottom: 5rem; /* Footer 높이만큼 패딩 추가 */
 `
 
 function User() {
