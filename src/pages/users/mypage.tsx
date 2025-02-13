@@ -37,7 +37,7 @@ function MyPage() {
             <GoogleOauthLogin />
             {/*TODO: get user info*/}
             <InfoContainer>
-                <Profile src={'https://placehold.co/40x40'} />
+                <Profile src={'https://placehold.co/32x32'} />
                 <Text>뽀야미</Text>
             </InfoContainer>
         </MyPageLayout>
