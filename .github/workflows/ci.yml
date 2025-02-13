@@ -1,4 +1,4 @@
-name: hairlor-fe CI
+name: hailor-fe CI
 
 on:
   - pull_request
