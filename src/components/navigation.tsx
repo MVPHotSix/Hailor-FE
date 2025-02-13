@@ -80,7 +80,7 @@ const Navigation = () => {
                 const to = routes[page]
                 const isActive = location.pathname === to
                 return (
-                    <NavItem key={page} active={isActive} to={to} onClick={handleClick} position={(index + 1) * 2}>
+                    <NavItem key={page} to={to} onClick={handleClick} position={(index + 1) * 2}>
                         <Icon src={icons[page]} active={isActive} />
                         <Text active={isActive}>{page}</Text>
                     </NavItem>
