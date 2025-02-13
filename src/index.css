@@ -13,10 +13,14 @@
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    min-width: 320px;
-    min-height: 100vh;
-    background-color: white;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: white;
+}
+
+html {
+  font-size: 62.5%; /* 10px === 1rem */
 }
