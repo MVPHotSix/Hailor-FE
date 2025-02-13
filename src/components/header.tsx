@@ -3,7 +3,6 @@ import styled from 'styled-components'
 const HeaderLayout = styled.header`
     width: 100%;
     z-index: 1000;
-    background-color: white;
 `
 
 const HeaderContent = styled.div`
