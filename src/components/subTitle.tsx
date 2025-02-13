@@ -17,7 +17,7 @@ const Text = styled.span`
     text-align: start;
 `
 
-function SubTitle({ title }: Props ) {
+function SubTitle({ title }: Props) {
     return (
         <Container>
             <Text>{title}</Text>
@@ -26,4 +26,3 @@ function SubTitle({ title }: Props ) {
 }
 
 export default SubTitle
-

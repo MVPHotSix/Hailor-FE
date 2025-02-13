@@ -24,7 +24,7 @@ const SearchBox = styled.form`
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     border: 0.1rem solid rgba(217, 217, 217, 0.6);
     border-radius: 1.2rem;
     padding: 0.8rem;
@@ -50,7 +50,11 @@ function Search() {
             <Container>
                 {/* TODO: add logic to search when submit */}
                 <SearchBox id="search" name="search">
-                    <SearchInput placeholder={'디자이너, 헤어샵을 검색해 보세요.'} value={searchText} onChange={(event) => setSearchText(event.target.value)} />
+                    <SearchInput
+                        placeholder={'디자이너, 헤어샵을 검색해 보세요.'}
+                        value={searchText}
+                        onChange={event => setSearchText(event.target.value)}
+                    />
                     <SearchIcon width={'2.4rem'} height={'2.4rem'} fill={'rgba(41, 41, 41, 0.6)'} />
                 </SearchBox>
             </Container>
