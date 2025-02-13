@@ -36,7 +36,7 @@ const NavigationContainer = styled.nav`
     padding: 0.8rem 0;
 `
 
-const NavItem = styled(Link)<{ position: number }>`
+const NavItem = styled(Link) <{ position: number }>`
     text-decoration: none;
     background: none;
     border: none;
@@ -50,8 +50,8 @@ const NavItem = styled(Link)<{ position: number }>`
 `
 
 const Icon = styled.div<{ src: string; active: boolean }>`
-    width: 1.5rem; /* 24px = 1.5rem */
-    height: 1.5rem;
+    width: 2.5rem; /* 24px = 1.5rem */
+    height: 2.5rem;
     background-color: ${({ active }) => (active ? '#35376E' : 'rgba(41, 41, 41, 0.6)')};
     mask: url(${props => props.src}) center / contain no-repeat;
     -webkit-mask: url(${props => props.src}) center / contain no-repeat;

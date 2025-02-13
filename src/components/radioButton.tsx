@@ -12,7 +12,13 @@ function RadioButton({ data, selected, onClick }: Props) {
         <RadioButtonLayout>
             {data.map(
                 (d, index): React.ReactNode => (
-                    <ButtonItem key={`${d}-${index}`} onClick={() => onClick(d)} selected={d === selected} index={index} total={data.length}>
+                    <ButtonItem
+                        key={`${d}-${index}`}
+                        onClick={() => onClick(d)}
+                        selected={d === selected}
+                        index={index}
+                        total={data.length}
+                    >
                         {d}
                     </ButtonItem>
                 ),
@@ -21,7 +27,7 @@ function RadioButton({ data, selected, onClick }: Props) {
     )
 }
 
-const RadioButtonLayout = styled.div`
+const RadioButtonLayout = styled.div<{ columnGap?: string }>`
     display: flex;
     align-items: center;
     justify-content: center;
