@@ -41,7 +41,7 @@ const NavItem = styled(Link)<{ position: number }>`
     background: none;
     border: none;
     cursor: pointer;
-    grid-column: ${props=> props.position};
+    grid-column: ${props => props.position};
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -64,11 +64,7 @@ const Icon = styled.div<{ src: string; active: boolean }>`
 
 const Text = styled.span<{ active: boolean }>`
     font-size: 1.4rem;
-<<<<<<< HEAD
     color: ${props => (props.active ? '#35376E' : 'rgba(41, 41, 41, 0.6)')};
-=======
-    color: ${props => props.active ? '#35376E' : 'rgba(41, 41, 41, 0.6)'};
->>>>>>> bce9c81 (feat: add init layout)
 `
 
 const Navigation = () => {
