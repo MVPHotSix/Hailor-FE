@@ -6,6 +6,8 @@ on:
 jobs:
   cache-and-install:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
 
     steps:
       - name: Checkout
@@ -26,7 +28,7 @@ jobs:
         uses: nwtgck/actions-netlify@v3.0
         with:
           publish-dir: './dist'
-          production-branch: main
+          production-branch: ${{ github.head_ref }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "🚀 Deploy from GitHub Actions for PR #${{ github.event.number }}"
           enable-pull-request-comment: false
