@@ -18,21 +18,6 @@ import PaymentCancel from './pages/payment/paymentCancel.tsx'
 import PaymentFailure from './pages/payment/paymentFailure.tsx'
 import PaymentSuccess from './pages/payment/paymentSuccess.tsx'
 
-import User from './pages/users/user.tsx'
-import Admin from './pages/admin/admin.tsx'
-import Home from './pages/users/home.tsx'
-import Search from './pages/users/search.tsx'
-import Reservation from './pages/users/reservation.tsx'
-import Chat from './pages/users/chat.tsx'
-import MyPage from './pages/users/mypage.tsx'
-import Main from './pages/main.tsx'
-import Login from './pages/login/login.tsx'
-import Register from './pages/login/register.tsx'
-import Payment from './pages/payment/payment.tsx'
-import PaymentCancel from './pages/payment/paymentCancel.tsx'
-import PaymentFailure from './pages/payment/paymentFailure.tsx'
-import PaymentSuccess from './pages/payment/paymentSuccess.tsx'
-
 const Layout = styled.div`
     width: 100vw;
     height: 100vh;
