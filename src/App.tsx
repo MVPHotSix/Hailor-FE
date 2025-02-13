@@ -2,7 +2,6 @@ import './App.css'
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import styled from 'styled-components'
-import * as React from 'react'
 
 import User from './pages/users/user.tsx'
 import Admin from './pages/admin/admin.tsx'
