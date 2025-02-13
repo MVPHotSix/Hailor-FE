@@ -16,7 +16,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    min-width: 320px;
+    min-width: 3.2rem;
     min-height: 100vh;
     background-color: white;
 }
