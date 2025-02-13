@@ -26,7 +26,7 @@ const NavigationContainer = styled.nav`
     width: 100%;
     height: 6.5rem;
     background-color: #ffffff;
-    border-top: 0.1rem solid #D9D9D9;
+    border-top: 0.1rem solid #d9d9d9;
     border-radius: 1.2rem 1.2rem 0 0;
     display: grid;
     grid-template-columns: 1.6rem repeat(${pages.length - 1}, 1fr 5.6rem) 1fr 1.6rem;
@@ -41,7 +41,7 @@ const NavItem = styled(Link)<{ position: number }>`
     background: none;
     border: none;
     cursor: pointer;
-    grid-column: ${props=> props.position};
+    grid-column: ${props => props.position};
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -64,7 +64,7 @@ const Icon = styled.div<{ src: string; active: boolean }>`
 
 const Text = styled.span<{ active: boolean }>`
     font-size: 1.4rem;
-    color: ${props => props.active ? '#35376E' : 'rgba(41, 41, 41, 0.6)'};
+    color: ${props => (props.active ? '#35376E' : 'rgba(41, 41, 41, 0.6)')};
 `
 
 const Navigation = () => {
