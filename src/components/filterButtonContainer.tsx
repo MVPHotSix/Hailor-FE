@@ -7,8 +7,8 @@ import ResetButton from '../components/resetButton'
 export type FilterType = '대면여부' | '위치' | '날짜' | '가격' | null
 
 interface FilterButtonContainerProps {
-    faceFilterOption: string | null
-    locationFilterSelection: string[]
+    faceFilterSelected: string | null
+    locationFilterSelected: string[]
     dateFilterSelected: Date | null
     priceFilterSelected: { min: number; max: number } | null
     onReset: () => void
@@ -16,8 +16,8 @@ interface FilterButtonContainerProps {
 }
 
 const FilterButtonContainer: React.FC<FilterButtonContainerProps> = ({
-    faceFilterOption,
-    locationFilterSelection,
+    faceFilterSelected,
+    locationFilterSelected,
     dateFilterSelected,
     priceFilterSelected,
     onReset,
@@ -25,9 +25,9 @@ const FilterButtonContainer: React.FC<FilterButtonContainerProps> = ({
 }) => {
     // 위치 버튼 텍스트 결정
     const getLocationButtonText = () => {
-        if (locationFilterSelection.length === 0) return '위치'
-        if (locationFilterSelection.length === 1) return locationFilterSelection[0]
-        return `${locationFilterSelection[0]} 외 ${locationFilterSelection.length - 1}곳`
+        if (locationFilterSelected.length === 0) return '위치'
+        if (locationFilterSelected.length === 1) return locationFilterSelected[0]
+        return `${locationFilterSelected[0]} 외 ${locationFilterSelected.length - 1}곳`
     }
 
     // 날짜 버튼 텍스트: 선택된 날짜가 있으면 "12월 24일", 없으면 "날짜"
@@ -46,13 +46,13 @@ const FilterButtonContainer: React.FC<FilterButtonContainerProps> = ({
         <Container>
             <ResetButton onClick={onReset} />
             <Button
-                text={faceFilterOption || '대면여부'}
-                type={faceFilterOption ? ButtonTypes.selected : ButtonTypes.default}
+                text={faceFilterSelected || '대면여부'}
+                type={faceFilterSelected ? ButtonTypes.selected : ButtonTypes.default}
                 onClick={() => onOpenFilter('대면여부')}
             />
             <Button
                 text={getLocationButtonText()}
-                type={locationFilterSelection.length > 0 ? ButtonTypes.selected : ButtonTypes.default}
+                type={locationFilterSelected.length > 0 ? ButtonTypes.selected : ButtonTypes.default}
                 onClick={() => onOpenFilter('위치')}
             />
             <Button

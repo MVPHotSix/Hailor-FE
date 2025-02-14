@@ -13,15 +13,15 @@ type FilterType = '대면여부' | '위치' | '날짜' | '가격' | null
 
 function Reservation() {
     const [activeFilter, setActiveFilter] = useState<FilterType>(null)
-    const [faceFilterOption, setFaceFilterOption] = useState<string | null>(null)
-    const [locationFilterSelection, setLocationFilterSelection] = useState<string[]>([])
+    const [faceFilterSelected, setFaceFilterSelected] = useState<string | null>(null)
+    const [locationFilterSelected, setLocationFilterSelected] = useState<string[]>([])
     const [dateFilterSelected, setDateFilterSelected] = useState<Date | null>(null)
     const [priceFilterSelected, setPriceFilterSelected] = useState<{ min: number; max: number } | null>(null)
 
     //필터 초기화
     const handleReset = () => {
-        setFaceFilterOption('') // 또는 초기값으로, 예: null
-        setLocationFilterSelection([])
+        setFaceFilterSelected('') // 또는 초기값으로, 예: null
+        setLocationFilterSelected([])
         setDateFilterSelected(null)
         setPriceFilterSelected(null)
     }
@@ -58,8 +58,8 @@ function Reservation() {
         <PageContainer>
             <SearchBox onSearch={query => console.log('검색어 전송:', query)} />
             <FilterButtonContainer
-                faceFilterOption={faceFilterOption}
-                locationFilterSelection={locationFilterSelection}
+                faceFilterSelected={faceFilterSelected}
+                locationFilterSelected={locationFilterSelected}
                 dateFilterSelected={dateFilterSelected}
                 priceFilterSelected={priceFilterSelected}
                 onReset={handleReset}
@@ -76,18 +76,18 @@ function Reservation() {
                         <PanelContent>
                             {activeFilter === '대면여부' && (
                                 <FaceFilter
-                                    initialSelected={faceFilterOption}
+                                    initialSelected={faceFilterSelected}
                                     onConfirm={value => {
-                                        setFaceFilterOption(value)
+                                        setFaceFilterSelected(value)
                                         closeFilter()
                                     }}
                                 />
                             )}
                             {activeFilter === '위치' && (
                                 <LocationFilter
-                                    initialSelected={locationFilterSelection}
+                                    initialSelected={locationFilterSelected}
                                     onConfirm={(selectedSubs: string[]) => {
-                                        setLocationFilterSelection(selectedSubs)
+                                        setLocationFilterSelected(selectedSubs)
                                         closeFilter()
                                     }}
                                 />
