@@ -181,7 +181,7 @@ function DateSelector({ date, hasInformation, setDate }: Props) {
             )}
             <CustomCalender
                 value={date}
-                onChange={setDate}
+                onChange={(value) => setDate(value as Date)}
                 calendarType="gregory"
                 defaultView="month"
                 locale={'ko-KR'}
