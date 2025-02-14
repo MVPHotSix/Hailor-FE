@@ -1,12 +1,37 @@
-import React from 'react';
+import React from 'react'
+import styled from 'styled-components'
+import RangeSlider from '../rangeSlider'
 
-const PriceFilter: React.FC = () => {
-  return (
-    <div>
-      {/* 가격 관련 옵션들을 여기에 구현 */}
-      <p>가격 관련 옵션들이 여기에 표시됩니다</p>
-    </div>
-  );
-};
+interface PriceRange {
+    min: number
+    max: number
+}
 
-export default PriceFilter;
+interface PriceFilterProps {
+    onConfirm: (range: PriceRange) => void
+    initialRange?: PriceRange | null
+}
+
+const PriceFilter: React.FC<PriceFilterProps> = ({ onConfirm, initialRange }) => {
+    return (
+        <Container>
+            <RangeSlider
+                initMin={initialRange ? initialRange.min : 10000}
+                initMax={initialRange ? initialRange.max : 50000}
+                min={0}
+                max={300000}
+                step={10000}
+                priceCap={10000}
+                onConfirm={onConfirm}
+            />
+        </Container>
+    )
+}
+
+export default PriceFilter
+
+const Container = styled.div`
+    padding: 1rem;
+    width: 90%;
+    max-width: 400px;
+`

@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
-import Button from '../../components/button'
-import { ButtonTypes } from '../../types/button'
+import FilterButtonContainer from '../../components/filterButtonContainer'
 import FaceFilter from '../../components/filter/faceFilter'
 import LocationFilter from '../../components/filter/locationFilter'
 import DateFilter from '../../components/filter/dateFilter'
 import PriceFilter from '../../components/filter/priceFilter'
 import SearchBox from '../../components/searchBox'
+import ProfileListComponent from '../../components/profileListComponent'
+import { designers } from '../../data/designerData'
 
 type FilterType = '대면여부' | '위치' | '날짜' | '가격' | null
 
@@ -14,12 +15,15 @@ function Reservation() {
     const [activeFilter, setActiveFilter] = useState<FilterType>(null)
     const [faceFilterOption, setFaceFilterOption] = useState<string | null>(null)
     const [locationFilterSelection, setLocationFilterSelection] = useState<string[]>([])
+    const [dateFilterSelected, setDateFilterSelected] = useState<Date | null>(null)
+    const [priceFilterSelected, setPriceFilterSelected] = useState<{ min: number; max: number } | null>(null)
 
-    // 위치 버튼 텍스트 결정
-    const getLocationButtonText = () => {
-        if (locationFilterSelection.length === 0) return '위치'
-        if (locationFilterSelection.length === 1) return locationFilterSelection[0]
-        return `${locationFilterSelection[0]} 외 ${locationFilterSelection.length - 1}곳`
+    //필터 초기화
+    const handleReset = () => {
+        setFaceFilterOption('') // 또는 초기값으로, 예: null
+        setLocationFilterSelection([])
+        setDateFilterSelected(null)
+        setPriceFilterSelected(null)
     }
 
     const openFilter = (filter: FilterType) => {
@@ -53,20 +57,14 @@ function Reservation() {
     return (
         <PageContainer>
             <SearchBox onSearch={query => console.log('검색어 전송:', query)} />
-            <FilterButtonsContainer>
-                <Button
-                    text={faceFilterOption || '대면여부'}
-                    type={faceFilterOption ? ButtonTypes.selected : ButtonTypes.default}
-                    onClick={() => openFilter('대면여부')}
-                />
-                <Button
-                    text={getLocationButtonText()}
-                    type={locationFilterSelection.length > 0 ? ButtonTypes.selected : ButtonTypes.default}
-                    onClick={() => openFilter('위치')}
-                />
-                <Button text="날짜" type={activeFilter === '날짜' ? ButtonTypes.selected : ButtonTypes.default} onClick={() => openFilter('날짜')} />
-                <Button text="가격" type={activeFilter === '가격' ? ButtonTypes.selected : ButtonTypes.default} onClick={() => openFilter('가격')} />
-            </FilterButtonsContainer>
+            <FilterButtonContainer
+                faceFilterOption={faceFilterOption}
+                locationFilterSelection={locationFilterSelection}
+                dateFilterSelected={dateFilterSelected}
+                priceFilterSelected={priceFilterSelected}
+                onReset={handleReset}
+                onOpenFilter={openFilter}
+            />
 
             {activeFilter && (
                 <Overlay onClick={closeFilter}>
@@ -94,12 +92,30 @@ function Reservation() {
                                     }}
                                 />
                             )}
-                            {activeFilter === '날짜' && <DateFilter />}
-                            {activeFilter === '가격' && <PriceFilter />}
+                            {activeFilter === '날짜' && (
+                                <DateFilter
+                                    initialSelected={dateFilterSelected || undefined}
+                                    onConfirm={selectedDate => {
+                                        setDateFilterSelected(selectedDate)
+                                        closeFilter()
+                                    }}
+                                />
+                            )}
+                            {activeFilter === '가격' && (
+                                <PriceFilter
+                                    initialRange={priceFilterSelected} // priceFilterSelected: {min: number, max: number} | null
+                                    onConfirm={range => {
+                                        setPriceFilterSelected(range)
+                                        closeFilter()
+                                    }}
+                                />
+                            )}
                         </PanelContent>
                     </FilterPanel>
                 </Overlay>
             )}
+
+            <ProfileListComponent designers={designers} />
         </PageContainer>
     )
 }
@@ -110,14 +126,6 @@ const PageContainer = styled.div`
     position: relative;
     min-height: 100%;
     padding: 3rem 2rem;
-`
-
-const FilterButtonsContainer = styled.div`
-    display: flex;
-    justify-content: space-start;
-    margin-bottom: 2rem;
-    margin-top: 2rem;
-    gap: 1rem;
 `
 
 const fadeIn = keyframes`
@@ -183,4 +191,7 @@ const CloseButton = styled.button`
 
 const PanelContent = styled.div`
     font-size: 1.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `

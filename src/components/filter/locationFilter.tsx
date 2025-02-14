@@ -47,7 +47,11 @@ const LocationFilter: React.FC<LocationFilterProps> = ({ initialSelected, onConf
                     ))}
                 </RightColumn>
             </ColumnContainer>
-            {selectedSubs.length > 0 && <ConfirmButton onClick={() => onConfirm(selectedSubs)}>선택하기</ConfirmButton>}
+            {selectedSubs.length > 0 && (
+                <ConfirmButton onClick={() => onConfirm(selectedSubs)}>
+                    {selectedSubs.length === 1 ? `${selectedSubs[0]} 추가하기` : `${selectedSubs[0]} 외 ${selectedSubs.length - 1}곳 추가하기`}
+                </ConfirmButton>
+            )}
         </Container>
     )
 }
@@ -55,16 +59,17 @@ const LocationFilter: React.FC<LocationFilterProps> = ({ initialSelected, onConf
 export default LocationFilter
 
 const Container = styled.div`
-    position: relative;
     width: 100%;
     height: 100%;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding-bottom: 10rem;
 `
 
 const ColumnContainer = styled.div`
     height: 100%;
     display: grid;
     grid-template-columns: 1fr 2fr;
-    padding-bottom: 4rem; /* 버튼 높이만큼 여백 추가 */
     font-size: 1.7rem;
     text-decoration: none;
     user-select: none;
@@ -105,16 +110,16 @@ const SubRegionItem = styled.div<{ selected: boolean }>`
 `
 
 const ConfirmButton = styled.button`
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
     margin: 0 auto;
-    padding: 0.8rem 1.2rem;
+    margin-top: 1rem;
+    padding: 1.2rem 1.2rem;
     background-color: #35376e;
     color: #fafcfe;
     border: none;
-    border-radius: 0.5rem;
+    border-radius: 3rem;
     cursor: pointer;
     z-index: 2;
+    width: 25rem;
+    font-size: 1.6rem;
+    font-weight: bold;
 `
