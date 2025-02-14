@@ -184,10 +184,11 @@ function DateSelector({ date, hasInformation, setDate }: Props) {
                 onChange={setDate}
                 calendarType="gregory"
                 defaultView="month"
-                formatDay={(locale, date) => `${date.getDate()}`}
-                formatMonth={(locale, date) => `${date.getMonth() + 1}월`}
-                formatYear={(locale, date) => `${date.getFullYear()}`}
-                formatMonthYear={(locale, date) => `${date.getMonth()}월`}
+                locale={'ko-KR'}
+                formatDay={(locale, date) => `${date.toLocaleDateString(locale as string).split('.')[2].trim()}`}
+                formatMonth={(locale, date) => `${date.toLocaleDateString(locale as string).split('.')[1].trim()}월`}
+                formatYear={(locale, date) => `${date.toLocaleDateString(locale as string).split('.')[0].trim()}`}
+                formatMonthYear={(locale, date) => `${date.toLocaleDateString(locale as string).split('.')[1].trim()}월`}
                 prev2Label={null}
                 next2Label={null}
             />
