@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import Button from "../../components/button";
 import { ButtonTypes } from '../../types/button';
-import FaceFilter from '../../components/filter/facefilter';
+import FaceFilter from '../../components/filter/faceFilter';
 import LocationFilter from '../../components/filter/locationFilter';
 import DateFilter from '../../components/filter/dateFilter';
 import PriceFilter from '../../components/filter/priceFilter';
@@ -11,88 +11,105 @@ import SearchBox from "../../components/searchBox";
 type FilterType = '대면여부' | '위치' | '날짜' | '가격' | null
 
 function Reservation() {
-    const [activeFilter, setActiveFilter] = useState<FilterType>(null);
-    const [faceFilterOption, setFaceFilterOption] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<FilterType>(null);
+  const [faceFilterOption, setFaceFilterOption] = useState<string | null>(null);
+  const [locationFilterSelection, setLocationFilterSelection] = useState<string[]>([]);
 
-    const openFilter = (filter: FilterType) => {
-        setActiveFilter(filter);
+  // 위치 버튼 텍스트 결정
+  const getLocationButtonText = () => {
+    if (locationFilterSelection.length === 0) return "위치"
+    if (locationFilterSelection.length === 1) return locationFilterSelection[0]
+    return `${locationFilterSelection[0]} 외 ${locationFilterSelection.length - 1}곳`
+  };
+
+  const openFilter = (filter: FilterType) => {
+    setActiveFilter(filter);
+  };
+
+  const closeFilter = () => {
+    setActiveFilter(null);
+  };
+
+  //모달창 나올시 스크롤 비활성화.
+  useEffect(() => {
+    const contentLayout = document.getElementById('content-layout');
+    if (contentLayout) {
+      if (activeFilter !== null) {
+        contentLayout.style.overflowY = 'hidden';
+        contentLayout.style.touchAction = 'none';
+      } else {
+        contentLayout.style.overflowY = 'scroll';
+        contentLayout.style.touchAction = 'auto';
+      }
+    }
+    return () => {
+      if (contentLayout) {
+        contentLayout.style.overflowY = 'scroll';
+        contentLayout.style.touchAction = 'auto';
+      }
     };
+  }, [activeFilter]);
 
-    const closeFilter = () => {
-        setActiveFilter(null);
-    };
+  return (
+    <PageContainer>
+      <SearchBox onSearch={(query) => console.log('검색어 전송:', query)} />
+      <FilterButtonsContainer>
+        <Button
+          text={faceFilterOption || "대면여부"}
+          type={faceFilterOption ? ButtonTypes.selected : ButtonTypes.default}
+          onClick={() => openFilter('대면여부')}
+        />
+        <Button
+          text={getLocationButtonText()}
+          type={locationFilterSelection.length > 0 ? ButtonTypes.selected : ButtonTypes.default}
+          onClick={() => openFilter('위치')}
+        />
+        <Button
+          text="날짜"
+          type={activeFilter === '날짜' ? ButtonTypes.selected : ButtonTypes.default}
+          onClick={() => openFilter('날짜')}
+        />
+        <Button
+          text="가격"
+          type={activeFilter === '가격' ? ButtonTypes.selected : ButtonTypes.default}
+          onClick={() => openFilter('가격')}
+        />
+      </FilterButtonsContainer>
 
-    useEffect(() => {
-        const contentLayout = document.getElementById('content-layout');
-        if (contentLayout) {
-            if (activeFilter !== null) {
-                contentLayout.style.overflowY = 'hidden';
-                contentLayout.style.touchAction = 'none';
-            } else {
-                contentLayout.style.overflowY = 'scroll';
-                contentLayout.style.touchAction = 'auto';
-            }
-        }
-        return () => {
-            if (contentLayout) {
-                contentLayout.style.overflowY = 'scroll';
-                contentLayout.style.touchAction = 'auto';
-            }
-        };
-    }, [activeFilter]);
-
-    return (
-        <PageContainer>
-            <SearchBox onSearch={(query) => console.log('검색어 전송:', query)} />
-            <FilterButtonsContainer>
-                <Button
-                    text={faceFilterOption || "대면여부"}
-                    type={faceFilterOption ? ButtonTypes.selected : ButtonTypes.default}
-                    onClick={() => openFilter('대면여부')}
+      {activeFilter && (
+        <Overlay onClick={closeFilter}>
+          <FilterPanel onClick={e => e.stopPropagation()}>
+            <PanelHeader>
+              <PanelTitle>{activeFilter} 필터</PanelTitle>
+              <CloseButton onClick={closeFilter}>✕</CloseButton>
+            </PanelHeader>
+            <PanelContent>
+              {activeFilter === '대면여부' && (
+                <FaceFilter
+                  initialSelected={faceFilterOption}
+                  onConfirm={(value) => {
+                    setFaceFilterOption(value);
+                    closeFilter();
+                  }}
                 />
-                <Button
-                    text="위치"
-                    type={activeFilter === '위치' ? ButtonTypes.selected : ButtonTypes.default}
-                    onClick={() => openFilter('위치')}
+              )}
+              {activeFilter === '위치' && (
+                <LocationFilter
+                  initialSelected={locationFilterSelection}
+                  onConfirm={(selectedSubs: string[]) => {
+                    setLocationFilterSelection(selectedSubs);
+                    closeFilter();
+                  }}
                 />
-                <Button
-                    text="날짜"
-                    type={activeFilter === '날짜' ? ButtonTypes.selected : ButtonTypes.default}
-                    onClick={() => openFilter('날짜')}
-                />
-                <Button
-                    text="가격"
-                    type={activeFilter === '가격' ? ButtonTypes.selected : ButtonTypes.default}
-                    onClick={() => openFilter('가격')}
-                />
-            </FilterButtonsContainer>
-
-            {activeFilter && (
-                <Overlay onClick={closeFilter}>
-                    <FilterPanel onClick={e => e.stopPropagation()}>
-                        <PanelHeader>
-                            <PanelTitle>{activeFilter} 필터</PanelTitle>
-                            <CloseButton onClick={closeFilter}>✕</CloseButton>
-                        </PanelHeader>
-                        <PanelContent>
-                            {activeFilter === '대면여부' && (
-                                <FaceFilter
-                                    initialSelected={faceFilterOption}
-                                    onConfirm={(value) => {
-                                        setFaceFilterOption(value);
-                                        closeFilter();
-                                    }}
-                                />
-                            )}
-                            {activeFilter === '위치' && <LocationFilter />}
-                            {activeFilter === '날짜' && <DateFilter />}
-                            {activeFilter === '가격' && <PriceFilter />}
-                        </PanelContent>
-                    </FilterPanel>
-                </Overlay>
-            )}
-        </PageContainer>
-    )
+              )}
+              {activeFilter === '날짜' && <DateFilter />}
+              {activeFilter === '가격' && <PriceFilter />}
+            </PanelContent>
+          </FilterPanel>
+        </Overlay>
+      )}
+    </PageContainer>
+  )
 }
 
 export default Reservation
