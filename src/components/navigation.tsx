@@ -32,7 +32,7 @@ const NavigationContainer = styled.nav`
     grid-template-columns: 1.6rem repeat(${pages.length - 1}, 1fr 1fr) 1fr 1.6rem;
     justify-content: space-around;
     align-items: center;
-    z-index: 1000;
+    z-index: 10;
     padding: 0.8rem 0;
 `
 

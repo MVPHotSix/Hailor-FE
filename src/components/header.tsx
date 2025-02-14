@@ -1,8 +1,16 @@
 import styled from 'styled-components'
 
 const HeaderLayout = styled.header`
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    top: 0;
     width: 100%;
-    z-index: 1000;
+    min-height: 5rem;
+    z-index: 10;
+    background-color: #ffffff;
+    border-bottom: 0.1rem solid rgba(217, 217, 217, 0.6);
 `
 
 const HeaderContent = styled.div`
