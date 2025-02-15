@@ -94,7 +94,7 @@ const CheckBox = styled.div<{ selected: boolean }>`
     border-radius: 0.6rem;
     width: 2rem;
     height: 2rem;
-    color: ${props => (props.selected ? '#62A87C' : '#FFFFFF')};
+    color: ${props => (props.selected ? '#62A87C' : '#FFFFFF')} !important;
 `
 
 const CheckLabel = styled.label`
@@ -200,8 +200,8 @@ function Register({ onClick }: { onClick: () => void }) {
             ))}
             <ContextBox>
                 {data.terms.map(term => (
-                    <CheckBoxContainer>
-                        <CheckBox id={`${term.id}`} selected={(checks & (1 << term.id)) === 1 << term.id} onClick={() => checkClick(term.id)}>
+                    <CheckBoxContainer onClick={() => checkClick(term.id)}>
+                        <CheckBox id={`${term.id}`} selected={(checks & (1 << term.id)) === 1 << term.id}>
                             ✔
                         </CheckBox>
                         <CheckLabel htmlFor={`${term.id}`}>[{term.title}] 위 약관에 모두 동의합니다.</CheckLabel>
