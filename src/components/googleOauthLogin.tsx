@@ -105,7 +105,7 @@ const CheckLabel = styled.label`
 const clientId = '286907731085-sakmukmthfcmb7f6t6s5el9ttkc968o4.apps.googleusercontent.com'
 
 function LoginComponent() {
-    const [showModal, setShowModal] = useState<boolean>(true)
+    const [showModal, setShowModal] = useState<boolean>(false)
     const login = useGoogleLogin({
         onSuccess: tokenResponse => {
             console.log('Success:', tokenResponse)
