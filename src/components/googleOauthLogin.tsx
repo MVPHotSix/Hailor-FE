@@ -176,6 +176,7 @@ function GoogleOauthLogin() {
     const [showModal, setShowModal] = useState<boolean>(false)
     const [credential, setCredential] = useState<string>('')
     const { setToken } = userStore()
+    console.log(window.location.origin)
 
     return (
         <GoogleOAuthProvider clientId={clientId}>
