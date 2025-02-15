@@ -14,6 +14,7 @@ interface IPaymentStore {
 export const paymentStore = create<IPaymentStore>(set => ({
     reservationId: -1,
     navigate: '',
+    pgToken: '',
     setNavigate: navigate => set({ navigate: navigate }),
     setReservationId: reservationId => {
         set({ reservationId: reservationId })
@@ -23,6 +24,6 @@ export const paymentStore = create<IPaymentStore>(set => ({
         set({ pgToken: pgToken })
         sessionStorage.setItem('pgToken', pgToken)
     },
-    getPgToken: () => sessionStorage.getItem('pgToken'),
-    getReservationId: () => parseInt(sessionStorage.getItem('reservationId')),
+    getPgToken: () => sessionStorage.getItem('pgToken') || '',
+    getReservationId: () => parseInt(sessionStorage.getItem('reservationId') || '-1'),
 }))

@@ -11,13 +11,17 @@ export async function getRegions(token: string): Promise<IRegion[]> {
     })
 
     if (!res.ok) {
-        return
+        return {} as IRegion[]
     }
     return res.json()
 }
 
 export async function getDesigners(filter: IGetDesignerListFilter, token: string): Promise<IGetDesignerList> {
-    const query = new URLSearchParams(filter)
+    const query = new URLSearchParams(
+        Object.fromEntries((
+            Object.entries(filter).map(([key, value]) => [key, String(value)])
+        ))
+    )
     const res = await fetch(`${VITE_SERVER_URL}/api/v1/designer?${query}`, {
         method: 'GET',
         headers: {
@@ -26,7 +30,7 @@ export async function getDesigners(filter: IGetDesignerListFilter, token: string
         },
     })
     if (!res.ok) {
-        return
+        return {} as IGetDesignerList
     }
     return res.json()
 }
@@ -40,7 +44,7 @@ export async function getDesignerSchedule(id: number, date: string, token: strin
         },
     })
     if (!res.ok) {
-        return
+        return {} as IGetDesignerScheduleResponse
     }
     return res.json()
 }

@@ -27,13 +27,13 @@ export const userStore = create<UserStore>(set => ({
         sessionStorage.setItem('exp', `${user.exp}`)
     },
     getToken: () => {
-        const exp = parseInt(sessionStorage.getItem('exp'))
+        const exp = parseInt(sessionStorage.getItem('exp') || '0')
         if (exp - Math.floor(Date.now() / 1000) < 1000) {
             fetch(`${VITE_SERVER_URL}/api/v1/auth/refresh?token=${sessionStorage.getItem('refreshToken')}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: sessionStorage.getItem('accessToken'),
+                    Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                 },
             })
                 .then(response => response.json())

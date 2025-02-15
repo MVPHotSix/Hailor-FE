@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom'
-import React, { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import SearchBox from '../../components/searchBox.tsx'
 import FilterButtonContainer from '../../components/filterButtonContainer.tsx'
 import FaceFilter from '../../components/filter/faceFilter.tsx'
@@ -13,12 +13,6 @@ import { CrossIcon } from '../../components/icon'
 import { ISearchContext } from '../../types/context.ts'
 
 type FilterType = '대면여부' | '위치' | '날짜' | '가격' | null
-
-const faceType = {
-    대면: 'OFFLINE',
-    비대면: 'ONLINE',
-    '대면·비대면': '',
-}
 
 function Search() {
     const [activeFilter, setActiveFilter] = useState<FilterType>(null)
@@ -46,7 +40,7 @@ function Search() {
             temp.name = query
         }
         if (faceFilterSelected) {
-            temp.meetingType = faceType[faceFilterSelected]
+            temp.meetingType = faceFilterSelected === '대면' ? 'OFFLINE' : faceFilterSelected === '비대면' ? 'ONLINE' : ''
         }
         if (locationFilterSelected) {
             temp.regionId = locationFilterSelected.id
@@ -118,13 +112,12 @@ function Search() {
                                         closeFilter()
                                         setFaceFilterSelected(value)
                                     }}
-                                    onClose={closeFilter}
                                 />
                             )}
                             {activeFilter === '위치' && (
                                 <LocationFilter
                                     initialSelected={locationFilterSelected}
-                                    onConfirm={(selectedSubs: IRegion) => {
+                                    onConfirm={(selectedSubs: IRegion | null) => {
                                         closeFilter()
                                         setLocationFilterSelected(selectedSubs)
                                     }}

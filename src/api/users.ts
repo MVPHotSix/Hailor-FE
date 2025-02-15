@@ -9,7 +9,7 @@ export async function getRegisterTerm(): Promise<IRegisterResponse> {
         },
     })
     if (!res.ok) {
-        return
+        return {} as IRegisterResponse
     }
     return res.json()
 }

@@ -1,6 +1,6 @@
-import { Designer } from '../types/designer' // 타입이 별도의 파일에 있다면 이렇게 import
-
-export const designers: Designer[] = [
+// import { Designer } from '../types/designer' // 타입이 별도의 파일에 있다면 이렇게 import
+/*
+* export const designers: Designer[] = [
     {
         id: 1,
         name: '윈터',
@@ -25,3 +25,4 @@ export const designers: Designer[] = [
     },
     // ... 추가 디자이너 데이터를 여기에 추가
 ]
+* */
