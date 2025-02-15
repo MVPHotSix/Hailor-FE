@@ -181,14 +181,34 @@ function DateSelector({ date, hasInformation, setDate }: Props) {
             )}
             <CustomCalender
                 value={date}
-                onChange={(value) => setDate(value as Date)}
+                onChange={value => setDate(value as Date)}
                 calendarType="gregory"
                 defaultView="month"
                 locale={'ko-KR'}
-                formatDay={(locale, date) => `${date.toLocaleDateString(locale as string).split('.')[2].trim()}`}
-                formatMonth={(locale, date) => `${date.toLocaleDateString(locale as string).split('.')[1].trim()}월`}
-                formatYear={(locale, date) => `${date.toLocaleDateString(locale as string).split('.')[0].trim()}`}
-                formatMonthYear={(locale, date) => `${date.toLocaleDateString(locale as string).split('.')[1].trim()}월`}
+                formatDay={(locale, date) =>
+                    `${date
+                        .toLocaleDateString(locale as string)
+                        .split('.')[2]
+                        .trim()}`
+                }
+                formatMonth={(locale, date) =>
+                    `${date
+                        .toLocaleDateString(locale as string)
+                        .split('.')[1]
+                        .trim()}월`
+                }
+                formatYear={(locale, date) =>
+                    `${date
+                        .toLocaleDateString(locale as string)
+                        .split('.')[0]
+                        .trim()}`
+                }
+                formatMonthYear={(locale, date) =>
+                    `${date
+                        .toLocaleDateString(locale as string)
+                        .split('.')[1]
+                        .trim()}월`
+                }
                 prev2Label={null}
                 next2Label={null}
             />

@@ -13,6 +13,7 @@ interface Props {
 const ModalLayout = styled.div`
     position: absolute;
     top: 0;
+    left: 0;
     background: rgba(41, 41, 41, 0.8);
     width: 100%;
     height: calc(var(--vh, 1vh) * 100 - 5rem);
@@ -42,6 +43,7 @@ const ModalContentContainer = styled.div`
 const Layout = styled.div`
     position: absolute;
     top: 5rem;
+    left: 0;
     background-color: #ffffff;
     width: 100%;
     height: calc(var(--vh, 1vh) * 100 - 5rem);

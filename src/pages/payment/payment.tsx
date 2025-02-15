@@ -13,6 +13,7 @@ import SelectButton from '../../components/selectButton.tsx'
 const PaymentContainer = styled.div`
     position: absolute;
     top: 5rem;
+    left: 0;
     background-color: #ffffff;
     width: 100%;
     height: calc(var(--vh, 1vh) * 100 - 5rem);

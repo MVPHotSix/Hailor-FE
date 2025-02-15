@@ -6,6 +6,7 @@ import { IPaymentContext } from '../../types/paymentContext.ts'
 const Layout = styled.div`
     position: absolute;
     top: 5rem;
+    left: 0;
     background: rgba(41, 41, 41, 0.8);
     width: 100%;
     height: calc(var(--vh, 1vh) * 100 - 5rem);
