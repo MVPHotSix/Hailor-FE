@@ -124,7 +124,6 @@ function Search() {
 export default Search
 
 const PageContainer = styled.div`
-    min-height: 100%;
     padding: 3rem 2rem;
 `
 

@@ -7,7 +7,9 @@ function Main() {
     const { getUser } = userStore()
     const user = getUser()
     useEffect(() => {
-        if (!user.role || user.role === 'USER') {
+        if (!user.role) {
+            navigate('/user/mypage')
+        } else if (user.role === 'USER') {
             navigate('/user')
         } else {
             navigate('/admin')
