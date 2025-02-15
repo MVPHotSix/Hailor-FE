@@ -16,7 +16,7 @@ function Search() {
     const [activeFilter, setActiveFilter] = useState<FilterType>(null)
     const [faceFilterSelected, setFaceFilterSelected] = useState<string | null>(null)
     const [locationFilterSelected, setLocationFilterSelected] = useState<string[]>([])
-    const [dateFilterSelected, setDateFilterSelected] = useState<Date>(new Date())
+    const [dateFilterSelected, setDateFilterSelected] = useState<Date | null>(null)
     const [priceFilterSelected, setPriceFilterSelected] = useState<{ min: number; max: number } | null>(null)
 
     //필터 초기화

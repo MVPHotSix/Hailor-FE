@@ -4,7 +4,7 @@ import 'react-calendar/dist/Calendar.css'
 import { CalenderIcon } from './icon'
 
 interface Props {
-    date: Date
+    date: Date | null
     hasInformation: boolean
     setDate: (d: Date) => void
 }
@@ -171,7 +171,7 @@ const dateConverter = ['일', '월', '화', '수', '목', '금', '토']
 function DateSelector({ date, hasInformation, setDate }: Props) {
     return (
         <Layout>
-            {hasInformation ? (
+            {hasInformation && date ? (
                 <InfoContainer>
                     <CalenderIcon width={'2.4rem'} height={'2.5rem'} fill={'#292929'} />
                     <InfoText>{`${date.getMonth() + 1}.${date.getDate()}.(${dateConverter[date.getDay()]})·시간을 선택해 주세요`}</InfoText>
@@ -181,6 +181,7 @@ function DateSelector({ date, hasInformation, setDate }: Props) {
             )}
             <CustomCalender
                 value={date}
+                defaultActiveStartDate={new Date()}
                 onChange={value => setDate(value as Date)}
                 calendarType="gregory"
                 defaultView="month"
