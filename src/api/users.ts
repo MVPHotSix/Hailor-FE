@@ -9,7 +9,7 @@ export async function getRegisterTerm(): Promise<IRegisterResponse> {
         },
     })
     if (!res.ok) {
-        throw new Error(`code: ${res.status}`)
+        return
     }
     return res.json()
 }

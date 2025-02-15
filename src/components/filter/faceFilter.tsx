@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import RadioButton from '../radioButton'
 
@@ -8,11 +8,7 @@ interface FaceFilterProps {
 }
 
 const FaceFilter: React.FC<FaceFilterProps> = ({ initialSelected, onConfirm }) => {
-    const [selected, setSelected] = useState<string>(initialSelected || '대면')
-
-    useEffect(() => {
-        setSelected(initialSelected || '대면')
-    }, [initialSelected])
+    const [selected, setSelected] = useState<string>(initialSelected || '')
 
     return (
         <Container>

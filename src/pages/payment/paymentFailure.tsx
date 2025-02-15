@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import PaymentCaution from '../../components/paymentCaution.tsx'
 import { useNavigate, useOutletContext } from 'react-router-dom'
-import { IPaymentContext } from '../../types/paymentContext.ts'
+import { IPaymentContext } from '../../types/context.ts'
 
 const Layout = styled.div`
     position: absolute;

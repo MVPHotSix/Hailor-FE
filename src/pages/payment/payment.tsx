@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import React, { useEffect, useMemo, useState } from 'react'
+import { Outlet, useNavigate, useOutletContext } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { ChevronLeftIcon, CrossIcon } from '../../components/icon'
@@ -9,6 +9,13 @@ import TimeSelector from '../../components/timeSelector.tsx'
 import { ITime } from '../../types/time.ts'
 import DepositModal from '../../components/depositModal.tsx'
 import SelectButton from '../../components/selectButton.tsx'
+import { ISearchContext } from '../../types/context.ts'
+import { useMutation } from '@tanstack/react-query'
+import { IPostReservation, IReservationFull } from '../../types/reservation.ts'
+import { postReservation } from '../../api/reservation.ts'
+import { userStore } from '../../store/user.ts'
+import { VITE_SERVER_URL } from '../../config'
+import { paymentStore } from '../../store/payment.ts'
 
 const PaymentContainer = styled.div`
     position: absolute;
@@ -89,38 +96,84 @@ const Prices = styled.span`
 
 const Image = styled.img`
     width: 100%;
-    height: 20rem;
+    height: 30rem;
     object-fit: cover;
+    object-position: top;
 `
-
-const reservationType = ['대면', '비대면']
-
 function Payment() {
-    // TODO: add get Data and send data
-    const today = new Date()
+    const { designer, date } = useOutletContext<ISearchContext>()
     const navigate = useNavigate()
+    const { getToken } = userStore()
+    const { setReservationId } = paymentStore()
+    const token = getToken()
+
     const [step, setStep] = useState<number>(0)
     const [selectedType, setReservationType] = useState<string>('')
-    const [date, setDate] = useState<Date>(today)
-    const [time, setTime] = useState<string>('')
+    const [selectedDate, setDate] = useState<Date>(date)
+    const [timeSlot, setTime] = useState<number>(-1)
     const [showDeposit, setShowDeposit] = useState<boolean>(false)
     const [payType, setPayType] = useState<number>(0)
 
+    const mutate = useMutation({
+        mutationFn: (body: IPostReservation) => {
+            return postReservation(body)
+        },
+        onSuccess: async () => {
+            fetch(`${VITE_SERVER_URL}/api/v1/reservation?size=1`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const res = data as {
+                        reservations: IReservationFull[]
+                    }
+                    console.log(res)
+                    setReservationId(res.reservations[0].id)
+                    if (res.reservations[0].paymentMethod === 'KAKAO_PAY') {
+                        setPayType(1)
+                        navigate('success')
+                    } else {
+                        setPayType(2)
+                        setShowDeposit(true)
+                    }
+                })
+        },
+        retry: 0,
+    })
+
     const times: ITime[] = useMemo(() => {
         const result = []
-        let current = 10 * 60
+        let current = 10 * 60,
+            index = 0
 
         while (current <= 20 * 60) {
             const hours = String(Math.floor(current / 60)).padStart(2, '0')
             const minutes = String(current % 60).padStart(2, '0')
             result.push({
                 time: `${hours}:${minutes}`,
-                status: true,
+                booked: false,
+                index: index,
             })
             current += 30
+            index += 1
         }
         return result
     }, [])
+
+    useEffect(() => {
+        const contentLayout = document.getElementById('content-layout')
+        if (contentLayout) {
+            if (showDeposit) {
+                contentLayout.style.overflow = 'scroll'
+            } else {
+                contentLayout.style.overflow = 'hidden'
+            }
+        }
+    }, [showDeposit])
 
     const back = () => navigate(-1)
     return (
@@ -130,18 +183,18 @@ function Payment() {
                     <BackButton onClick={back}>
                         <ChevronLeftIcon width={'1.2rem'} height={'2rem'} fill={'#292929'} />
                     </BackButton>
-                    <Title>김민지</Title>
+                    <Title>{designer.name}</Title>
                     <CrossButton onClick={back}>
                         <CrossIcon width={'1.8rem'} height={'1.8rem'} fill={'#292929'} />
                     </CrossButton>
                 </TitleContainer>
-                <Image src={'https://placehold.co/600x600'} />
+                <Image src={designer.profileImageURL} />
                 <SubtitleContainer>
                     <Title>예약하기</Title>
                 </SubtitleContainer>
                 <FormContainer>
                     <RadioButton
-                        data={reservationType}
+                        data={designer.meetingType.split('/')}
                         selected={selectedType}
                         onClick={(t: string) => {
                             if (step === 0) {
@@ -152,7 +205,7 @@ function Payment() {
                     />
                     {step > 0 && (
                         <DateSelector
-                            date={date}
+                            date={selectedDate}
                             hasInformation={true}
                             setDate={(t: Date) => {
                                 if (step === 1) {
@@ -164,9 +217,11 @@ function Payment() {
                     )}
                     {step > 1 && (
                         <TimeSelector
+                            id={designer.id}
+                            date={`${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`}
                             times={times}
-                            selected={time}
-                            setTime={(t: string) => {
+                            selected={timeSlot}
+                            setTime={(t: number) => {
                                 if (step === 2) {
                                     setStep(3)
                                 }
@@ -176,7 +231,9 @@ function Payment() {
                     )}
                     {step > 2 && (
                         <PriceContainer>
-                            <Prices>총 230,000</Prices>
+                            <Prices>
+                                {selectedType === '대면' ? designer.onlinePrice.toLocaleString() : designer.offlinePrice.toLocaleString()}원
+                            </Prices>
                         </PriceContainer>
                     )}
                     {step > 2 && (
@@ -184,12 +241,34 @@ function Payment() {
                             text1={'계좌이체 결제'}
                             text2={'카카오페이 결제'}
                             onClick1={() => {
-                                setPayType(2)
-                                setShowDeposit(true)
+                                const data: IPostReservation = {
+                                    secret: {
+                                        token: token,
+                                    },
+                                    uri: {
+                                        designerId: designer.id,
+                                        reservationDate: `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`,
+                                        slot: timeSlot,
+                                        meetingType: selectedType === '대면' ? 'OFFLINE' : 'ONLINE',
+                                        paymentMethod: '',
+                                    },
+                                }
+                                mutate.mutate(data)
                             }}
                             onClick2={() => {
-                                setPayType(1)
-                                navigate('success')
+                                const data: IPostReservation = {
+                                    secret: {
+                                        token: token,
+                                    },
+                                    uri: {
+                                        designerId: designer.id,
+                                        reservationDate: `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`,
+                                        slot: timeSlot,
+                                        meetingType: selectedType === '대면' ? 'OFFLINE' : 'ONLINE',
+                                        paymentMethod: 'KAKAO_PAY',
+                                    },
+                                }
+                                mutate.mutate(data)
                             }}
                         />
                     )}

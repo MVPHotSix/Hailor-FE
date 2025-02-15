@@ -2,11 +2,16 @@ import { ITime } from '../types/time.ts'
 import styled from 'styled-components'
 import { useMemo } from 'react'
 import * as React from 'react'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { userStore } from '../store/user.ts'
+import { getDesignerSchedule } from '../api/designer.ts'
 
 interface Props {
+    id: number
+    date: string
     times: ITime[]
-    selected: string
-    setTime: (s: string) => void
+    selected: number
+    setTime: (s: number) => void
 }
 
 const Layout = styled.div`
@@ -49,12 +54,21 @@ const Time = styled.span<{ selected: boolean }>`
     color: ${props => (props.selected ? '#FFFFFF' : '#292929')};
 `
 
-function TimeSelector({ times, selected, setTime }: Props) {
+function TimeSelector({ id, date, times, selected, setTime }: Props) {
+    const { getToken } = userStore()
+    const token = getToken()
+    const { data } = useSuspenseQuery({
+        queryKey: ['designerSchedule', id, date, token],
+        queryFn: () => getDesignerSchedule(id, date, token),
+    })
+
     const [anteMeridiem, postMeridiem] = useMemo(() => {
-        const anteMeridiem = times.filter(({ time }) => parseInt(time.split(':')[0], 10) < 12)
-        const postMeridiem = times.filter(({ time }) => parseInt(time.split(':')[0], 10) > 12)
+        const slot = new Set([...data.schedule.slot])
+        const temp = times.map((t, i) => ({ ...t, booked: slot.has(i) }))
+        const anteMeridiem = temp.filter(({ time }) => parseInt(time.split(':')[0], 10) < 12)
+        const postMeridiem = temp.filter(({ time }) => parseInt(time.split(':')[0], 10) > 12)
         return [anteMeridiem, postMeridiem]
-    }, [times])
+    }, [data, times])
 
     return (
         <Layout>
@@ -64,8 +78,8 @@ function TimeSelector({ times, selected, setTime }: Props) {
             <TimeGroupContainer>
                 {anteMeridiem.map(
                     (t): React.ReactNode => (
-                        <TimeContainer onClick={() => setTime(t.time)} selected={selected === t.time} blocked={!t.status}>
-                            <Time selected={selected === t.time}>{t.time}</Time>
+                        <TimeContainer onClick={() => setTime(t.index)} selected={selected === t.index} blocked={t.booked}>
+                            <Time selected={selected === t.index}>{t.time}</Time>
                         </TimeContainer>
                     ),
                 )}
@@ -76,8 +90,8 @@ function TimeSelector({ times, selected, setTime }: Props) {
             <TimeGroupContainer>
                 {postMeridiem.map(
                     (t): React.ReactNode => (
-                        <TimeContainer onClick={() => setTime(t.time)} selected={selected === t.time} blocked={!t.status}>
-                            <Time selected={selected === t.time}>{t.time}</Time>
+                        <TimeContainer onClick={() => setTime(t.index)} selected={selected === t.index} blocked={t.booked}>
+                            <Time selected={selected === t.index}>{t.time}</Time>
                         </TimeContainer>
                     ),
                 )}
