@@ -1,23 +1,11 @@
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google'
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
-import { GoogleLoginIcon } from './icon'
 import { VITE_SERVER_URL } from '../config'
 import { getRegisterTerm } from '../api/users.ts'
-
-const Container = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-    border: 0.1rem solid rgba(217, 217, 217, 0.6);
-    border-radius: 1.2rem;
-    padding: 1.2rem;
-    gap: 0.8rem;
-`
+import { userStore } from '../store/user.ts'
 
 const Modal = styled.div`
     position: absolute;
@@ -67,12 +55,6 @@ const Content = styled.iframe`
     border: none;
 `
 
-const Text = styled.span`
-    font-size: 1.6rem;
-    font-weight: bold;
-    color: #292929;
-`
-
 const Title = styled.span`
     font-size: 2.4rem;
     font-weight: bold;
@@ -104,68 +86,9 @@ const CheckLabel = styled.label`
 
 const clientId = '286907731085-sakmukmthfcmb7f6t6s5el9ttkc968o4.apps.googleusercontent.com'
 
-function LoginComponent() {
-    const [showModal, setShowModal] = useState<boolean>(false)
-    const login = useGoogleLogin({
-        onSuccess: tokenResponse => {
-            console.log('Success:', tokenResponse)
-            fetch(`${VITE_SERVER_URL}/api/v1/auth/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ token: tokenResponse.access_token }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data)
-                    setShowModal(false)
-                })
-        },
-        onError: () => {
-            console.log('login failed')
-        },
-    })
-    const register = useGoogleLogin({
-        onSuccess: tokenResponse => {
-            console.log('Success:', tokenResponse)
-            fetch(`${VITE_SERVER_URL}/api/v1/auth/sign-up`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ token: tokenResponse.access_token }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data)
-                    setShowModal(false)
-                })
-        },
-        onError: () => {
-            console.log('register failed')
-        },
-    })
-
-    return (
-        <Container
-            onClick={() => {
-                if (!showModal) {
-                    login()
-                }
-            }}
-        >
-            <GoogleLoginIcon width={'3.2rem'} height={'3.2rem'} fill={'none'} />
-            <Text>구글로 로그인하기</Text>
-            {showModal && (
-                <Register onClick={() => register()} />
-            )}
-        </Container>
-    )
-}
-
-function Register({ onClick }: { onClick: () => void }) {
+function Register({ onClick, credential }: { onClick: () => void; credential: string }) {
     const [checks, setCheck] = useState<number>(0)
+    const { setToken } = userStore()
     const { data } = useSuspenseQuery({
         queryKey: ['registerTerm'],
         queryFn: () => getRegisterTerm(),
@@ -211,7 +134,35 @@ function Register({ onClick }: { onClick: () => void }) {
             <Button
                 onClick={() => {
                     if ((checks & minRule) === minRule) {
-                        onClick()
+                        const agreedTerms = checks
+                            .toString(2)
+                            .split('')
+                            .reverse()
+                            .map((bit, index) => (bit === '1' ? index : -1))
+                            .filter(index => index !== -1)
+                        console.log(credential, agreedTerms)
+                        fetch(`${VITE_SERVER_URL}/api/v1/auth/sign-up`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ token: credential, agreedTerms: agreedTerms }),
+                        })
+                            .then(response => response.json())
+                            .then(() => {
+                                fetch(`${VITE_SERVER_URL}/api/v1/auth/login`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ token: credential }),
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        setToken(data)
+                                        onClick()
+                                    })
+                            })
                     }
                 }}
             >
@@ -222,9 +173,38 @@ function Register({ onClick }: { onClick: () => void }) {
 }
 
 function GoogleOauthLogin() {
+    const [showModal, setShowModal] = useState<boolean>(false)
+    const [credential, setCredential] = useState<string>('')
+    const { setToken } = userStore()
+
     return (
         <GoogleOAuthProvider clientId={clientId}>
-            <LoginComponent />
+            <GoogleLogin
+                theme={'outline'}
+                login_uri={`${window.location.origin}`}
+                onSuccess={credentialResponse => {
+                    fetch(`${VITE_SERVER_URL}/api/v1/auth/login`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ token: credentialResponse.credential }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.accessToken) {
+                                setToken(data)
+                            } else {
+                                setShowModal(true)
+                                setCredential(credentialResponse.credential as string)
+                            }
+                        })
+                }}
+                onError={() => {
+                    console.log('Login Failed')
+                }}
+            />
+            {showModal && <Register onClick={() => setShowModal(false)} credential={credential} />}
         </GoogleOAuthProvider>
     )
 }

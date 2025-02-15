@@ -13,8 +13,6 @@ import Reservation from './pages/users/reservation.tsx'
 import Chat from './pages/users/chat.tsx'
 import MyPage from './pages/users/mypage.tsx'
 import Main from './pages/main.tsx'
-import Login from './pages/login/login.tsx'
-import Register from './pages/login/register.tsx'
 import Payment from './pages/payment/payment.tsx'
 import PaymentCancel from './pages/payment/paymentCancel.tsx'
 import PaymentFailure from './pages/payment/paymentFailure.tsx'
@@ -54,8 +52,6 @@ function App() {
                 <BrowserRouter>
                     <Routes>
                         <Route path="" element={<Main />} />
-                        <Route path="login" element={<Login />} />
-                        <Route path="register" element={<Register />} />
                         <Route path="user" element={<User />}>
                             <Route path="" element={<Home />} />
                             <Route path="search" element={<Search />}>
