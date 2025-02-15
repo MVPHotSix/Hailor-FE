@@ -176,13 +176,11 @@ function GoogleOauthLogin() {
     const [showModal, setShowModal] = useState<boolean>(false)
     const [credential, setCredential] = useState<string>('')
     const { setToken } = userStore()
-    console.log(window.location.origin)
 
     return (
         <GoogleOAuthProvider clientId={clientId}>
             <GoogleLogin
                 theme={'outline'}
-                login_uri={`${window.location.origin}`}
                 onSuccess={credentialResponse => {
                     fetch(`${VITE_SERVER_URL}/api/v1/auth/login`, {
                         method: 'POST',
