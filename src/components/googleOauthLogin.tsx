@@ -107,6 +107,7 @@ const clientId = '286907731085-sakmukmthfcmb7f6t6s5el9ttkc968o4.apps.googleuserc
 function LoginComponent() {
     const [showModal, setShowModal] = useState<boolean>(true)
     const login = useGoogleLogin({
+        redirect_uri: `${import.meta.env.BASE_URL}`,
         onSuccess: tokenResponse => {
             console.log('Success:', tokenResponse)
             fetch(`${VITE_SERVER_URL}/api/v1/auth/login`, {
@@ -114,7 +115,7 @@ function LoginComponent() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ token: tokenResponse.access_token }),
+                body: JSON.stringify({ token: tokenResponse.code }),
             })
                 .then(response => response.json())
                 .then(data => {
