@@ -204,7 +204,7 @@ function Register({ onClick }: { onClick: () => void }) {
                         <CheckBox id={`${term.id}`} selected={(checks & (1 << term.id)) === 1 << term.id} onClick={() => checkClick(term.id)}>
                             ✔
                         </CheckBox>
-                        <CheckLabel for={`${term.id}`}>[{term.title}] 위 약관에 모두 동의합니다.</CheckLabel>
+                        <CheckLabel htmlFor={`${term.id}`}>[{term.title}] 위 약관에 모두 동의합니다.</CheckLabel>
                     </CheckBoxContainer>
                 ))}
             </ContextBox>
