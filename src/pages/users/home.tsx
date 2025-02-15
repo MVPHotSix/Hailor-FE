@@ -101,6 +101,7 @@ const CardImage = styled.img`
     object-fit: cover;
 `;
 
+
 const CardText = styled.p`
     font-size: 14px;
     margin-top: 5px;
@@ -122,6 +123,7 @@ function Home() {
     ];
 
     return (
+
         <Body>
             <MainLayout>
                 <ContentLayout>
@@ -165,6 +167,7 @@ function Home() {
             </MainLayout>
         </Body>
     );
+
 }
 
 export default Home;
