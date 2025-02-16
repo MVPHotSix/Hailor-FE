@@ -1,15 +1,14 @@
 import styled from 'styled-components'
-import PaymentCaution from '../../components/paymentCaution.tsx'
-import { useNavigate, useOutletContext } from 'react-router-dom'
-import { IPaymentContext } from '../../types/context.ts'
+import PaymentCaution from '../../components/payment/paymentCaution.tsx'
+import { useNavigate } from 'react-router-dom'
 
 const Layout = styled.div`
     position: absolute;
-    top: 5rem;
+    top: 0;
     left: 0;
     background: rgba(41, 41, 41, 0.8);
     width: 100%;
-    height: calc(var(--vh, 1vh) * 100 - 5rem);
+    height: calc(var(--vh, 1vh) * 100);
     display: flex;
     align-items: center;
     justify-items: center;
@@ -19,7 +18,6 @@ const Layout = styled.div`
 
 function PaymentFailure() {
     const navigate = useNavigate()
-    const { backStatus, closeModal } = useOutletContext<IPaymentContext>()
     return (
         <Layout>
             <PaymentCaution
@@ -27,10 +25,7 @@ function PaymentFailure() {
                 status={false}
                 text={'결제에 실패했어요'}
                 onClick={() => {
-                    if (backStatus === 2) {
-                        closeModal()
-                    }
-                    navigate(-1)
+                    navigate('/user/home')
                 }}
             />
         </Layout>

@@ -14,13 +14,14 @@ export interface IReservationFull {
     slot: number
     status: string
     paymentMethod: string
+    meetingType: string
     googleMeetLink: string | null
     price: number
     designer: Designer
 }
 
 export interface IPostReservation {
-    uri: IReservation
+    body: IReservation
     secret: {
         token: string
     }

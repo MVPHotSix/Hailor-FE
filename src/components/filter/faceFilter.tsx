@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import RadioButton from '../radioButton'
+import RadioButton from '../buttons/radioButton.tsx'
 
 interface FaceFilterProps {
     initialSelected: string | null

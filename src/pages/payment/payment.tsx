@@ -1,21 +1,22 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Outlet, useNavigate, useOutletContext } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import styled from 'styled-components'
+import { useMutation } from '@tanstack/react-query'
 
 import { ChevronLeftIcon, CrossIcon } from '../../components/icon'
-import RadioButton from '../../components/radioButton.tsx'
-import DateSelector from '../../components/dateSelector.tsx'
-import TimeSelector from '../../components/timeSelector.tsx'
-import { ITime } from '../../types/time.ts'
-import DepositModal from '../../components/depositModal.tsx'
-import SelectButton from '../../components/selectButton.tsx'
-import { ISearchContext } from '../../types/context.ts'
-import { useMutation } from '@tanstack/react-query'
-import { IPostReservation, IReservationFull } from '../../types/reservation.ts'
+import RadioButton from '../../components/buttons/radioButton.tsx'
+import DateSelector from '../../components/filter/dateSelector.tsx'
+import TimeSelector from '../../components/filter/timeSelector.tsx'
+import DepositModal from '../../components/payment/depositModal.tsx'
+import SelectButton from '../../components/buttons/selectButton.tsx'
 import { postReservation } from '../../api/reservation.ts'
+import PaymentModal from '../../components/payment/paymentModal.tsx'
 import { userStore } from '../../store/user.ts'
 import { VITE_SERVER_URL } from '../../config'
 import { paymentStore } from '../../store/payment.ts'
+import { ITime } from '../../types/time.ts'
+import { ISearchContext } from '../../types/context.ts'
+import { IPostReservation, IReservationFull } from '../../types/reservation.ts'
 
 const PaymentContainer = styled.div`
     position: absolute;
@@ -104,15 +105,15 @@ function Payment() {
     const { designer, date } = useOutletContext<ISearchContext>()
     const navigate = useNavigate()
     const { getToken } = userStore()
-    const { setReservationId } = paymentStore()
+    const { setReservationId, setReservationType } = paymentStore()
     const token = getToken()
 
     const [step, setStep] = useState<number>(0)
-    const [selectedType, setReservationType] = useState<string>('')
+    const [selectedType, setType] = useState<string>('')
     const [selectedDate, setDate] = useState<Date>(date)
     const [timeSlot, setTime] = useState<number>(-1)
     const [showDeposit, setShowDeposit] = useState<boolean>(false)
-    const [payType, setPayType] = useState<number>(0)
+    const [showPayment, setShowPayment] = useState<boolean>(false)
 
     const mutate = useMutation({
         mutationFn: (body: IPostReservation) => {
@@ -133,11 +134,10 @@ function Payment() {
                     }
                     console.log(res)
                     setReservationId(res.reservations[0].id)
+                    setReservationType(res.reservations[0].meetingType)
                     if (res.reservations[0].paymentMethod === 'KAKAO_PAY') {
-                        setPayType(1)
-                        navigate('success')
+                        setShowPayment(true)
                     } else {
-                        setPayType(2)
                         setShowDeposit(true)
                     }
                 })
@@ -200,7 +200,7 @@ function Payment() {
                             if (step === 0) {
                                 setStep(1)
                             }
-                            setReservationType(t)
+                            setType(t)
                         }}
                     />
                     {step > 0 && (
@@ -245,12 +245,12 @@ function Payment() {
                                     secret: {
                                         token: token,
                                     },
-                                    uri: {
+                                    body: {
                                         designerId: designer.id,
                                         reservationDate: `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`,
                                         slot: timeSlot,
                                         meetingType: selectedType === '대면' ? 'OFFLINE' : 'ONLINE',
-                                        paymentMethod: '',
+                                        paymentMethod: 'BANK_TRANSFER',
                                     },
                                 }
                                 mutate.mutate(data)
@@ -260,7 +260,7 @@ function Payment() {
                                     secret: {
                                         token: token,
                                     },
-                                    uri: {
+                                    body: {
                                         designerId: designer.id,
                                         reservationDate: `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`,
                                         slot: timeSlot,
@@ -274,13 +274,8 @@ function Payment() {
                     )}
                 </FormContainer>
             </PaymentContainer>
-            <Outlet
-                context={{
-                    backStatus: payType,
-                    closeModal: () => setShowDeposit(false),
-                }}
-            />
-            {showDeposit && <DepositModal price={23000} onClose={() => navigate('cancel')} />}
+            {showDeposit && <DepositModal price={23000} onClose={() => {}} />}
+            {showPayment && <PaymentModal />}
         </div>
     )
 }

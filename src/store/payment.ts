@@ -1,29 +1,25 @@
 import { create } from 'zustand/react'
 
 interface IPaymentStore {
-    navigate: string
     reservationId: number
-    pgToken: string
+    reservationType: string
     setReservationId: (reservationId: number) => void
-    setNavigate: (navigate: string) => void
-    setPgToken: (pgToken: string) => void
-    getPgToken: () => string
+    setReservationType: (reservationType: string) => void
     getReservationId: () => number
+    getReservationType: () => string
 }
 
 export const paymentStore = create<IPaymentStore>(set => ({
     reservationId: -1,
-    navigate: '',
-    pgToken: '',
-    setNavigate: navigate => set({ navigate: navigate }),
+    reservationType: '',
+    setReservationType: reservationType => {
+        set({ reservationType: reservationType })
+        sessionStorage.setItem('reservationType', reservationType)
+    },
     setReservationId: reservationId => {
         set({ reservationId: reservationId })
         sessionStorage.setItem('reservationId', `${reservationId}`)
     },
-    setPgToken: (pgToken: string) => {
-        set({ pgToken: pgToken })
-        sessionStorage.setItem('pgToken', pgToken)
-    },
-    getPgToken: () => sessionStorage.getItem('pgToken') || '',
     getReservationId: () => parseInt(sessionStorage.getItem('reservationId') || '-1'),
+    getReservationType: () => sessionStorage.getItem('reservationType') || '',
 }))

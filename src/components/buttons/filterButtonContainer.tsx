@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import Button from '../components/button'
-import { ButtonTypes } from '../types/button'
-import ResetButton from '../components/resetButton'
-import { IRegion } from '../types/designer.ts'
+import Button from './button.tsx'
+import { ButtonTypes } from '../../types/button.ts'
+import ResetButton from './resetButton.tsx'
+import { IRegion } from '../../types/designer.ts'
 
 export type FilterType = '대면여부' | '위치' | '날짜' | '가격' | null
 

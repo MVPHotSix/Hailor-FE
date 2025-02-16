@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
-import { CalenderIcon } from './icon'
+import { CalenderIcon } from '../icon'
 
 interface Props {
     date: Date | null

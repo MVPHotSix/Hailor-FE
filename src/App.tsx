@@ -17,7 +17,7 @@ import Payment from './pages/payment/payment.tsx'
 import PaymentCancel from './pages/payment/paymentCancel.tsx'
 import PaymentFailure from './pages/payment/paymentFailure.tsx'
 import PaymentSuccess from './pages/payment/paymentSuccess.tsx'
-import PgReserver from './pages/payment/pgReserver.tsx'
+import PgServer from './pages/payment/pgServer.tsx'
 
 const Layout = styled.div`
     width: 100vw;
@@ -53,9 +53,7 @@ function App() {
                 <BrowserRouter>
                     <Routes>
                         <Route path="" element={<Main />} />
-                        <Route path="payment/success" element={<PgReserver />} />
-                        <Route path="payment/failure" element={<PgReserver />} />
-                        <Route path="payment/cancel" element={<PgReserver />} />
+                        <Route path="payment/*" element={<PgServer />} />
                         <Route path="user" element={<User />}>
                             <Route path="" element={<Home />} />
                             <Route path="search" element={<Search />}>

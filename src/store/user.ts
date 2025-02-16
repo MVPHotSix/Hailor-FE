@@ -30,7 +30,7 @@ export const userStore = create<UserStore>(set => ({
         const exp = parseInt(sessionStorage.getItem('exp') || '0')
         if (exp - Math.floor(Date.now() / 1000) < 1000) {
             fetch(`${VITE_SERVER_URL}/api/v1/auth/refresh?token=${sessionStorage.getItem('refreshToken')}`, {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -39,8 +39,12 @@ export const userStore = create<UserStore>(set => ({
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
-                    sessionStorage.setItem('accessToken', data.accessToken)
-                    sessionStorage.setItem('refreshToken', data.refreshToken)
+                    if (data.refreshToken) {
+                        sessionStorage.setItem('accessToken', data.accessToken)
+                        sessionStorage.setItem('refreshToken', data.refreshToken)
+                        const user = jwt.decode(data.accessToken) as IUser
+                        sessionStorage.setItem('exp', `${user.exp}`)
+                    }
                 })
         }
         return sessionStorage.getItem('accessToken') || ''

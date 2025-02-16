@@ -1,10 +1,10 @@
-import { ITime } from '../types/time.ts'
+import { ITime } from '../../types/time.ts'
 import styled from 'styled-components'
 import { useMemo } from 'react'
 import * as React from 'react'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { userStore } from '../store/user.ts'
-import { getDesignerSchedule } from '../api/designer.ts'
+import { userStore } from '../../store/user.ts'
+import { getDesignerSchedule } from '../../api/designer.ts'
 
 interface Props {
     id: number

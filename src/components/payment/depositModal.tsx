@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeftIcon, CrossIcon } from './icon'
-import SelectButton from './selectButton.tsx'
+import { ChevronLeftIcon, CrossIcon } from '../icon'
+import SelectButton from '../buttons/selectButton.tsx'
 import PaymentCaution from './paymentCaution.tsx'
 import { useState } from 'react'
 

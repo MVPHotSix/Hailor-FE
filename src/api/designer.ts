@@ -17,11 +17,7 @@ export async function getRegions(token: string): Promise<IRegion[]> {
 }
 
 export async function getDesigners(filter: IGetDesignerListFilter, token: string): Promise<IGetDesignerList> {
-    const query = new URLSearchParams(
-        Object.fromEntries((
-            Object.entries(filter).map(([key, value]) => [key, String(value)])
-        ))
-    )
+    const query = new URLSearchParams(Object.fromEntries(Object.entries(filter).map(([key, value]) => [key, String(value)])))
     const res = await fetch(`${VITE_SERVER_URL}/api/v1/designer?${query}`, {
         method: 'GET',
         headers: {

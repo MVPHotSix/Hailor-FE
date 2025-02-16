@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
-import { VITE_SERVER_URL } from '../config'
+import { googleClientId, VITE_SERVER_URL } from '../config'
 import { getRegisterTerm } from '../api/users.ts'
 import { userStore } from '../store/user.ts'
 
@@ -83,8 +83,6 @@ const CheckLabel = styled.label`
     font-size: 1.4rem;
     text-align: left;
 `
-
-const clientId = '286907731085-sakmukmthfcmb7f6t6s5el9ttkc968o4.apps.googleusercontent.com'
 
 function Register({ onClick, credential }: { onClick: () => void; credential: string }) {
     const [checks, setCheck] = useState<number>(0)
@@ -178,7 +176,7 @@ function GoogleOauthLogin() {
     const { setToken } = userStore()
 
     return (
-        <GoogleOAuthProvider clientId={clientId}>
+        <GoogleOAuthProvider clientId={googleClientId}>
             <GoogleLogin
                 theme={'outline'}
                 onSuccess={credentialResponse => {
