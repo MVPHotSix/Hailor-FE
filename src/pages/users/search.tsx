@@ -57,6 +57,7 @@ function Search() {
 
     return (
         <PageContainer>
+            <Outlet />
             <SearchBox onSearch={query => console.log('검색어 전송:', query)} />
             <FilterButtonContainer
                 faceFilterSelected={faceFilterSelected}
@@ -116,7 +117,6 @@ function Search() {
                 </Overlay>
             )}
             <ProfileListComponent designers={designers} />
-            <Outlet />
         </PageContainer>
     )
 }
@@ -124,7 +124,7 @@ function Search() {
 export default Search
 
 const PageContainer = styled.div`
-    min-height: 100%;
+    height: 100%;
     padding: 3rem 2rem;
 `
 
