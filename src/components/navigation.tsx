@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
 import * as React from 'react'
 
-const pages = ['홈', '검색', '내 예약', '채팅', '마이'] as const
+const pages = ['홈', '검색', '내 예약', '마이'] as const
 
 export type Page = (typeof pages)[number]
 
@@ -10,7 +10,6 @@ const routes: Record<Page, string> = {
     홈: '/user',
     검색: '/user/search',
     '내 예약': '/user/reservation',
-    채팅: '/user/chat',
     마이: '/user/mypage',
 }
 
@@ -19,7 +18,6 @@ const icons: Record<Page, string> = {
     홈: '/홈_네비.svg',
     검색: '/검색_네비.svg',
     '내 예약': '/예약_네비.svg',
-    채팅: '/채팅_네비.svg',
     마이: '/마이페이지_네비.svg',
 }
 

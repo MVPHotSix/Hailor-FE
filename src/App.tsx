@@ -64,7 +64,6 @@ function App() {
                                 </Route>
                             </Route>
                             <Route path="reservation" element={<Reservation />} />
-                            <Route path="chat" element={<Chat />} />
                             <Route path="mypage" element={<MyPage />} />
                         </Route>
                         <Route path="admin" element={<Admin />} />

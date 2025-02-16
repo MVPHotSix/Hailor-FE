@@ -146,6 +146,10 @@ function Payment() {
         retry: 0,
     })
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
+
     const times: ITime[] = useMemo(() => {
         const result = []
         let current = 10 * 60,
