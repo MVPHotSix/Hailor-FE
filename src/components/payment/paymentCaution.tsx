@@ -46,7 +46,7 @@ function MakeMeet({ id, onClose }: { id: number; onClose: () => void }) {
     const { getToken } = userStore()
     const token = getToken()
     const onClick = useGoogleLogin({
-        scope: 'email profile https://www.googleapis.com/auth/meetings.space.created',
+        scope: 'https://www.googleapis.com/auth/calendar.app.created https://www.googleapis.com/auth/calendar.calendarlist.readonly',
         onSuccess: codeResponse => {
             console.log(codeResponse.access_token)
             fetch(`${VITE_SERVER_URL}/api/v1/payment/kakao-pay/confirm`, {
