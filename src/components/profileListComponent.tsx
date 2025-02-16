@@ -48,7 +48,7 @@ const ProfileListComponent: React.FC<ProfileListComponentProps> = ({ filter, set
                                 <TopBox>
                                     <NameBox>
                                         <Name>{designer.name}</Name>
-                                        <ConsultationType>{designer.meetingType}</ConsultationType>
+                                        <ConsultationType>{designer.meetingType.replace('/', '·')}</ConsultationType>
                                     </NameBox>
                                     <Specialties>{`전문분야: ${designer.specialization}`}</Specialties>
                                     <Specialties>{designer.description}</Specialties>
