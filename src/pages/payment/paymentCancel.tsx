@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom'
 
 const Layout = styled.div`
     position: absolute;
-    top: 0;
+    top: 5rem;
     left: 0;
     background: rgba(41, 41, 41, 0.8);
     width: 100%;
-    height: calc(var(--vh, 1vh) * 100);
+    height: calc(var(--vh, 1vh) * 100 - 5rem);
     display: flex;
     align-items: center;
     justify-items: center;

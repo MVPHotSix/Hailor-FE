@@ -35,8 +35,8 @@ const SubTitleContainer = styled.div`
 const TimeContainer = styled.div<{ selected: boolean; blocked: boolean }>`
     align-items: center;
     justify-items: center;
-    background-color: ${props => (props.blocked ? '#D9D9D9' : props.selected ? '#35376e' : '#FFFFFF')};
-    border: 0.1rem solid ${props => (props.blocked ? 'rgba(217, 217, 217, 0.6)' : props.selected ? '#292959' : 'rgba(217, 217, 217, 0.6)')};
+    background-color: ${props => (props.selected ? '#35376e' : props.blocked ? '#D9D9D9' : '#FFFFFF')};
+    border: 0.1rem solid ${props => (props.selected ? '#292959' : props.blocked ? 'rgba(217, 217, 217, 0.6)' : 'rgba(217, 217, 217, 0.6)')};
     border-radius: 0.8rem;
     padding: 1.2rem 2rem;
     pointer-events: ${props => (props.blocked ? 'none' : 'auto')};
@@ -60,13 +60,15 @@ function TimeSelector({ id, date, times, selected, setTime }: Props) {
     const { data } = useSuspenseQuery({
         queryKey: ['designerSchedule', id, date, token],
         queryFn: () => getDesignerSchedule(id, date, token),
+        staleTime: 0,
+        gcTime: 0,
     })
 
     const [anteMeridiem, postMeridiem] = useMemo(() => {
         const slot = new Set([...data.schedule.slot])
         const temp = times.map((t, i) => ({ ...t, booked: slot.has(i) }))
         const anteMeridiem = temp.filter(({ time }) => parseInt(time.split(':')[0], 10) < 12)
-        const postMeridiem = temp.filter(({ time }) => parseInt(time.split(':')[0], 10) > 12)
+        const postMeridiem = temp.filter(({ time }) => parseInt(time.split(':')[0], 10) >= 12)
         return [anteMeridiem, postMeridiem]
     }, [data, times])
 

@@ -162,7 +162,7 @@ function DepositModal({ price, onClose }: Props) {
                     <PaymentCaution
                         size={'1.6rem'}
                         status={true}
-                        text={'디자이너님이 확인하시면 예약이 완료되요'}
+                        text={'입금이 확인되면 예약이 완료돼요'}
                         onClick={() => {
                             setShowSuccess(false)
                             onClose()

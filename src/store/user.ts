@@ -5,12 +5,13 @@ import { IToken, IUser } from '../types/users.ts'
 
 interface UserStore {
     user: IUser
+    isRefresh: boolean
     setToken: (token: IToken) => void
     getToken: () => string
     getUser: () => IUser
 }
 
-export const userStore = create<UserStore>(set => ({
+export const userStore = create<UserStore>((set, get) => ({
     user: {
         email: '',
         userId: '',
@@ -18,6 +19,7 @@ export const userStore = create<UserStore>(set => ({
         role: '',
         exp: 0,
     },
+    isRefresh: false,
     setToken: token => {
         const user: IUser = jwt.decode(token.accessToken) as IUser
         set({ user })
@@ -28,7 +30,8 @@ export const userStore = create<UserStore>(set => ({
     },
     getToken: () => {
         const exp = parseInt(sessionStorage.getItem('exp') || '0')
-        if (exp - Math.floor(Date.now() / 1000) < 1000) {
+        if (!get().isRefresh && exp - Math.floor(Date.now() / 1000) < 1000) {
+            set({ isRefresh: true })
             fetch(`${VITE_SERVER_URL}/api/v1/auth/refresh?token=${sessionStorage.getItem('refreshToken')}`, {
                 method: 'GET',
                 headers: {
@@ -46,6 +49,7 @@ export const userStore = create<UserStore>(set => ({
                         sessionStorage.setItem('exp', `${user.exp}`)
                     }
                 })
+                .finally(() => set({ isRefresh: false }))
         }
         return sessionStorage.getItem('accessToken') || ''
     },

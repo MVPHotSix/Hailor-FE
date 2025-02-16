@@ -105,7 +105,7 @@ function Payment() {
     const { designer, date } = useOutletContext<ISearchContext>()
     const navigate = useNavigate()
     const { getToken } = userStore()
-    const { setReservationId, setReservationType } = paymentStore()
+    const { setReservationId, setReservationType, setPaymentType } = paymentStore()
     const token = getToken()
 
     const [step, setStep] = useState<number>(0)
@@ -135,6 +135,7 @@ function Payment() {
                     console.log(res)
                     setReservationId(res.reservations[0].id)
                     setReservationType(res.reservations[0].meetingType)
+                    setPaymentType(res.reservations[0].paymentMethod)
                     if (res.reservations[0].paymentMethod === 'KAKAO_PAY') {
                         setShowPayment(true)
                     } else {
@@ -232,7 +233,7 @@ function Payment() {
                     {step > 2 && (
                         <PriceContainer>
                             <Prices>
-                                {selectedType === '대면' ? designer.onlinePrice.toLocaleString() : designer.offlinePrice.toLocaleString()}원
+                                총 {selectedType === '대면' ? designer.onlinePrice.toLocaleString() : designer.offlinePrice.toLocaleString()}원
                             </Prices>
                         </PriceContainer>
                     )}
@@ -274,7 +275,15 @@ function Payment() {
                     )}
                 </FormContainer>
             </PaymentContainer>
-            {showDeposit && <DepositModal price={23000} onClose={() => {}} />}
+            {showDeposit && (
+                <DepositModal
+                    price={23000}
+                    onClose={() => {
+                        setShowDeposit(false)
+                        navigate('/user')
+                    }}
+                />
+            )}
             {showPayment && <PaymentModal />}
         </div>
     )

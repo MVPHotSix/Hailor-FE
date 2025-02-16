@@ -4,7 +4,7 @@ import { PropagateLoader } from 'react-spinners'
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google'
 
 import { googleClientId, VITE_SERVER_URL } from '../../config'
-import { FailureIcon, SuccessIcon } from '../icon'
+import { FailureIcon, GoogleLoginIcon, SuccessIcon } from '../icon'
 import { paymentStore } from '../../store/payment.ts'
 import { userStore } from '../../store/user.ts'
 
@@ -42,7 +42,32 @@ const Text = styled.span<{ size: string }>`
     width: 100%;
 `
 
-function MakeMeet({ id, onClose }: { id: number; onClose: () => void }) {
+const GoogleMeetButton = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 1.2rem;
+    background-color: #35376e;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #292959;
+    }
+`
+
+const GoogleMeetText = styled.span`
+    font-size: 1.6rem;
+    border-left: 1px solid #fff;
+    padding: 0 1rem;
+`
+
+function MakeMeet({ id, onClose, pg_token }: { id: number; onClose: () => void; pg_token: string }) {
     const { getToken } = userStore()
     const token = getToken()
     const onClick = useGoogleLogin({
@@ -57,29 +82,38 @@ function MakeMeet({ id, onClose }: { id: number; onClose: () => void }) {
                 },
                 body: JSON.stringify({
                     reservationId: id,
-                    googleAuthCode: codeResponse.access_token,
+                    googleAccessToken: codeResponse.access_token,
+                    pgToken: pg_token,
                 }),
-            }).then(() => {
-                onClose()
             })
+                .then(response => response.json())
+                .then(() => onClose())
         },
         onError: errorResponse => {
             console.log(errorResponse)
         },
     })
 
-    return <div onClick={onClick}>구글 미팅 만들기</div>
+    return (
+        <div>
+            <GoogleMeetButton onClick={() => onClick()}>
+                <GoogleLoginIcon width={'2.4rem'} height={'2.4rem'} fill={'none'} />
+                <GoogleMeetText>구글 미팅 만들기</GoogleMeetText>
+            </GoogleMeetButton>
+        </div>
+    )
 }
 
 function PaymentCaution({ status, text, onClick, size }: Props) {
-    const { getReservationId, getReservationType } = paymentStore()
+    const { getReservationId, getReservationType, getPaymentType, pg_token } = paymentStore()
     const reservationId = getReservationId()
     const reservationType = getReservationType()
+    const paymentType = getPaymentType()
     useEffect(() => {
-        if (status != true || reservationType === 'OFFLINE') {
+        if (status != true || (reservationType === 'OFFLINE' && paymentType === 'KAKAO_PAY')) {
             setTimeout(() => onClick(), 3000)
         }
-    }, [status])
+    }, [status, reservationType, paymentType, onClick])
 
     return (
         <Modal>
@@ -94,9 +128,9 @@ function PaymentCaution({ status, text, onClick, size }: Props) {
                     )}
                 </StatusImage>
                 <Text size={size}>{text}</Text>
-                {status === true && reservationType === 'ONLINE' && (
+                {status === true && reservationType === 'ONLINE' && paymentType === 'KAKAO_PAY' && (
                     <GoogleOAuthProvider clientId={googleClientId}>
-                        <MakeMeet id={reservationId} onClose={onClick} />
+                        <MakeMeet id={reservationId} onClose={onClick} pg_token={pg_token} />
                     </GoogleOAuthProvider>
                 )}
             </ContentContainer>
