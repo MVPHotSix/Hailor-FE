@@ -37,21 +37,16 @@ function Search() {
 
     //모달창 나올시 스크롤 비활성화.
     useEffect(() => {
-        const contentLayout = document.getElementById('content-layout')
-        if (contentLayout) {
-            if (activeFilter !== null) {
-                contentLayout.style.overflowY = 'hidden'
-                contentLayout.style.touchAction = 'none'
-            } else {
-                contentLayout.style.overflowY = 'scroll'
-                contentLayout.style.touchAction = 'auto'
-            }
+        if (activeFilter !== null) {
+            document.body.style.overflow = 'hidden'
+            document.body.style.touchAction = 'none'
+        } else {
+            document.body.style.overflow = 'auto'
+            document.body.style.touchAction = 'auto'
         }
         return () => {
-            if (contentLayout) {
-                contentLayout.style.overflowY = 'scroll'
-                contentLayout.style.touchAction = 'auto'
-            }
+            document.body.style.overflow = 'auto'
+            document.body.style.touchAction = 'auto'
         }
     }, [activeFilter])
 
