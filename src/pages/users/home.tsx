@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { reservationData } from '../../data/exReservationData'
 import { designers } from '../../data/designerData'
+import React from 'react'
 
 function Home() {
     const { reservationDate, placeName, consultationType, reservationTime } = reservationData
@@ -44,45 +45,45 @@ function Home() {
                 {/* 인기있는 디자이너 섹션 */}
                 <SectionTitle>인기있는 디자이너</SectionTitle>
                 <HorizontalScrollContainer>
-                    {designers.map(designer => (
-                        <StyledLink key={designer.id} to="/user/search/payment">
-                            <Card key={designer.id}>
-                                <CardImage src={designer.profileImageURL} alt={designer.name} />
-                                <CardInfo>
-                                    <CardName>{designer.name}</CardName>
-                                    <CardDetail>{designer.region}</CardDetail>
-                                </CardInfo>
-                                <CardInfo>
-                                    <CardDetail />
-                                    <CardDetail>{designer.specialization}</CardDetail>
-                                </CardInfo>
-                            </Card>
-                        </StyledLink>
-                    ))}
+                    {designers.map(
+                        (designer): React.ReactNode => (
+                            <StyledLink key={designer.id}>
+                                <Card>
+                                    <CardImage src={designer.profileImageURL} alt={designer.name} />
+                                    <CardInfo>
+                                        <CardName>{designer.name}</CardName>
+                                        <CardDetail>{designer.region}</CardDetail>
+                                    </CardInfo>
+                                    <CardInfo>
+                                        <CardDetail />
+                                        <CardDetail>{designer.specialization}</CardDetail>
+                                    </CardInfo>
+                                </Card>
+                            </StyledLink>
+                        ),
+                    )}
                 </HorizontalScrollContainer>
 
-                {/* 인기있는 헤어샵 섹션 (예시 - 하드코딩 데이터 사용) */}
-                <SectionTitle>인기있는 헤어샵</SectionTitle>
+                {/* 과거에 컨설팅 예약을 했던 디자이너 리스트 */}
+                <SectionTitle>최근 디자이너</SectionTitle>
                 <HorizontalScrollContainer>
-                    {/* 여기에는 헤어샵 데이터를 나열 */}
-                    <Card>
-                        <CardImage src="https://placehold.co/100x100" alt="헤어샵 A" />
-                        <CardName>헤어샵 A</CardName>
-                        <CardInfo>서울 강남</CardInfo>
-                        <CardInfo>★4.7</CardInfo>
-                    </Card>
-                    <Card>
-                        <CardImage src="https://placehold.co/100x100" alt="헤어샵 B" />
-                        <CardName>헤어샵 B</CardName>
-                        <CardInfo>서울 강남</CardInfo>
-                        <CardInfo>★4.8</CardInfo>
-                    </Card>
-                    <Card>
-                        <CardImage src="https://placehold.co/100x100" alt="헤어샵 C" />
-                        <CardName>헤어샵 C</CardName>
-                        <CardInfo>서울 강남</CardInfo>
-                        <CardInfo>★4.6</CardInfo>
-                    </Card>
+                    {designers.map(
+                        (designer): React.ReactNode => (
+                            <StyledLink key={designer.id}>
+                                <Card>
+                                    <CardImage src={designer.profileImageURL} alt={designer.name} />
+                                    <CardInfo>
+                                        <CardName>{designer.name}</CardName>
+                                        <CardDetail>{designer.region}</CardDetail>
+                                    </CardInfo>
+                                    <CardInfo>
+                                        <CardDetail />
+                                        <CardDetail>{designer.specialization}</CardDetail>
+                                    </CardInfo>
+                                </Card>
+                            </StyledLink>
+                        ),
+                    )}
                 </HorizontalScrollContainer>
             </FamousContainer>
         </HomeContainer>

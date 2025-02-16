@@ -12,14 +12,14 @@ import SelectButton from '../../components/buttons/selectButton.tsx'
 import { postReservation } from '../../api/reservation.ts'
 import PaymentModal from '../../components/payment/paymentModal.tsx'
 import { userStore } from '../../store/user.ts'
-import { VITE_SERVER_URL } from '../../config'
+import { VITE_SEVER_URL } from '../../config'
 import { paymentStore } from '../../store/payment.ts'
 import { ITime } from '../../types/time.ts'
 import { ISearchContext } from '../../types/context.ts'
 import { IPostReservation, IReservationFull } from '../../types/reservation.ts'
 
 const PaymentContainer = styled.div`
-    position: absolute;
+    position: fixed;
     top: 5rem;
     left: 0;
     background-color: #ffffff;
@@ -120,7 +120,7 @@ function Payment() {
             return postReservation(body)
         },
         onSuccess: async () => {
-            fetch(`${VITE_SERVER_URL}/api/v1/reservation?size=1`, {
+            fetch(`${VITE_SEVER_URL}/api/v1/reservation?size=1`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -148,6 +148,17 @@ function Payment() {
 
     useEffect(() => {
         window.scrollTo(0, 0)
+    }, [])
+
+    useEffect(() => {
+        // 현재 body의 overflow 값을 저장합니다.
+        const originalOverflow = document.body.style.overflow
+        // Payment가 나타나면 스크롤을 비활성화합니다.
+        document.body.style.overflow = 'hidden'
+        return () => {
+            // Payment가 사라지면 원래 상태로 복원합니다.
+            document.body.style.overflow = originalOverflow
+        }
     }, [])
 
     const times: ITime[] = useMemo(() => {
@@ -182,7 +193,7 @@ function Payment() {
 
     const back = () => navigate(-1)
     return (
-        <div>
+        <>
             <PaymentContainer>
                 <TitleContainer>
                     <BackButton onClick={back}>
@@ -289,7 +300,7 @@ function Payment() {
                 />
             )}
             {showPayment && <PaymentModal />}
-        </div>
+        </>
     )
 }
 

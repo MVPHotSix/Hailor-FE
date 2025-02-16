@@ -11,6 +11,8 @@ import DateSelector from '../../components/filter/dateSelector.tsx'
 import { IGetDesignerListFilter, IRegion } from '../../types/designer.ts'
 import { CrossIcon } from '../../components/icon'
 import { ISearchContext } from '../../types/context.ts'
+import { userStore } from '../../store/user.ts'
+import NeedLogin from '../../components/needLogin.tsx'
 
 type FilterType = '대면여부' | '위치' | '날짜' | '가격' | null
 
@@ -23,8 +25,10 @@ function Search() {
     const [priceFilterSelected, setPriceFilterSelected] = useState<{ min: number; max: number } | null>(null)
     const [filter, setFilter] = useState<IGetDesignerListFilter>({ size: 10 })
     const [context, setContext] = useState<ISearchContext | null>(null)
-
     const memoFilter = useMemo(() => filter, [filter])
+    const { getUser } = userStore()
+    const user = getUser()
+
     //필터 초기화
     const handleReset = () => {
         setFaceFilterSelected(null)
@@ -65,26 +69,26 @@ function Search() {
 
     //모달창 나올시 스크롤 비활성화.
     useEffect(() => {
-        const contentLayout = document.getElementById('content-layout')
-        if (contentLayout) {
-            if (activeFilter !== null) {
-                contentLayout.style.overflowY = 'hidden'
-                contentLayout.style.touchAction = 'none'
-            } else {
-                contentLayout.style.overflowY = 'scroll'
-                contentLayout.style.touchAction = 'auto'
-            }
+        if (activeFilter !== null) {
+            document.body.style.overflow = 'hidden'
+            document.body.style.touchAction = 'none'
+        } else {
+            document.body.style.overflow = 'auto'
+            document.body.style.touchAction = 'auto'
         }
         return () => {
-            if (contentLayout) {
-                contentLayout.style.overflowY = 'scroll'
-                contentLayout.style.touchAction = 'auto'
-            }
+            document.body.style.overflow = 'auto'
+            document.body.style.touchAction = 'auto'
         }
     }, [activeFilter])
 
+    if (!user.name) {
+        return <NeedLogin />
+    }
+
     return (
         <PageContainer>
+            <Outlet context={context} />
             <SearchBox onSearch={setQuery} />
             <FilterButtonContainer
                 faceFilterSelected={faceFilterSelected}
@@ -139,7 +143,6 @@ function Search() {
                     </FilterPanel>
                 </Overlay>
             )}
-            <Outlet context={context} />
             <ProfileListComponent filter={memoFilter} setContext={setContext} time={dateFilterSelected || new Date()} />
         </PageContainer>
     )
@@ -148,6 +151,7 @@ function Search() {
 export default Search
 
 const PageContainer = styled.div`
+    height: 100%;
     padding: 3rem 2rem;
 `
 

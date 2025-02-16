@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { PropagateLoader } from 'react-spinners'
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google'
 
-import { googleClientId, VITE_SERVER_URL } from '../../config'
+import { googleClientId, VITE_SEVER_URL } from '../../config'
 import { FailureIcon, GoogleLoginIcon, SuccessIcon } from '../icon'
 import { paymentStore } from '../../store/payment.ts'
 import { userStore } from '../../store/user.ts'
@@ -74,7 +74,7 @@ function MakeMeet({ id, onClose, pg_token }: { id: number; onClose: () => void; 
         scope: 'https://www.googleapis.com/auth/calendar.app.created https://www.googleapis.com/auth/calendar.calendarlist.readonly',
         onSuccess: codeResponse => {
             console.log(codeResponse.access_token)
-            fetch(`${VITE_SERVER_URL}/api/v1/payment/kakao-pay/confirm`, {
+            fetch(`${VITE_SEVER_URL}/api/v1/payment/kakao-pay/confirm`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -110,8 +110,8 @@ function PaymentCaution({ status, text, onClick, size }: Props) {
     const reservationType = getReservationType()
     const paymentType = getPaymentType()
     useEffect(() => {
-        if (status != true || (reservationType === 'OFFLINE' && paymentType === 'KAKAO_PAY')) {
-            setTimeout(() => onClick(), 3000)
+        if (status != true || !(reservationType === 'OFFLINE' && paymentType === 'KAKAO_PAY')) {
+            setTimeout(() => onClick(), 2000)
         }
     }, [status, reservationType, paymentType, onClick])
 

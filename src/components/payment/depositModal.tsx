@@ -166,7 +166,7 @@ function DepositModal({ price, onClose }: Props) {
                         onClick={() => {
                             setShowSuccess(false)
                             onClose()
-                            navigate('/user/search')
+                            navigate('/user')
                         }}
                     />
                 </ModalLayout>
