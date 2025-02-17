@@ -24,7 +24,8 @@ jobs:
       - name: make env
         run: |
           touch ./.env
-          echo '${{ secrets.VITE_SEVER_URL }}' > ./.env
+          echo 'VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}' > ./.env
+          echo 'VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}' >> ./.env
 
       - name: Build Project
         run: |
