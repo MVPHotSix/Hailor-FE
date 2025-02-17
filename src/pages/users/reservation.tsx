@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { GoogleLoginIcon } from '../../components/icon'
 import { userStore } from '../../store/user.ts'
 import NeedLogin from '../../components/needLogin.tsx'
-import { googleClientId, VITE_SEVER_URL } from '../../config'
+import { googleClientId, VITE_SERVER_URL } from '../../config'
 import { IReservationFull } from '../../types/reservation.ts'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import MakeMeet from '../../components/makeMeet.tsx'
@@ -15,7 +15,7 @@ function ReservationComponent() {
     const { getToken } = userStore()
     const token = getToken()
     useEffect(() => {
-        fetch(`${VITE_SEVER_URL}/api/v1/reservation?size=20`, {
+        fetch(`${VITE_SERVER_URL}/api/v1/reservation?size=20`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
