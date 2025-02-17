@@ -8,6 +8,7 @@ import { googleClientId, VITE_SERVER_URL } from '../../config'
 import { IReservationFull } from '../../types/reservation.ts'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import MakeMeet from '../../components/makeMeet.tsx'
+import { cancelReservation } from '../../api/reservation.ts'
 
 function ReservationComponent() {
     const [reservations, setReservations] = useState<IReservationFull[]>([])
@@ -15,6 +16,7 @@ function ReservationComponent() {
     const [isLoading, setLoading] = useState<boolean>(true)
     const { getToken } = userStore()
     const token = getToken()
+
     useEffect(() => {
         setLoading(true)
         fetch(`${VITE_SERVER_URL}/api/v1/reservation?size=20`, {
@@ -60,6 +62,21 @@ function ReservationComponent() {
     const getDay = (date: string): string => {
         const formatting = ['일', '월', '화', '수', '목', '금', '토']
         return formatting[new Date(date).getDay()]
+    }
+
+    // 예약취소 핸들러
+    const handleCancelReservation = async () => {
+        if (window.confirm('예약을 취소하시겠습니까?')) {
+            try {
+                await cancelReservation(reservations[0].id, token)
+                alert('예약이 취소되었습니다.')
+                // 취소 후 필요한 UI 업데이트나 페이지 이동 처리
+            } catch (error) {
+                console.error('예약 취소 실패:', error)
+                console.log(reservations[0].id)
+                alert('예약 취소에 실패하였습니다.')
+            }
+        }
     }
 
     if (isLoading) {
@@ -129,6 +146,9 @@ function ReservationComponent() {
                             )}
                         </InfoBox>
                     )}
+                    <InfoBox>
+                        <CancelButton onClick={handleCancelReservation}>예약 취소</CancelButton>
+                    </InfoBox>
                 </InfoBoxesContainer>
             </FormContainer>
         </PaymentContainer>
@@ -206,6 +226,10 @@ const CountdownText = styled.div`
     background-color: #35376e;
     padding: 0 1rem;
     border-radius: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 `
 
 const InfoBoxesContainer = styled.div`
@@ -294,4 +318,20 @@ const NoReservationText = styled.div`
     font-size: 2rem;
     color: rgba(55, 55, 110, 1);
     font-weight: bold;
+`
+
+const CancelButton = styled.button`
+    padding: 1rem 2rem;
+    background-color: #ff4d4d;
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #e04343;
+    }
 `

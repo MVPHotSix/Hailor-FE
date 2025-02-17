@@ -10,6 +10,7 @@ import { getHotDesigners } from '../../api/designer.ts'
 import { Designer } from '../../types/designer.ts'
 import { designerStore } from '../../store/designer.ts'
 import NeedLogin from '../../components/needLogin.tsx'
+import { Link } from 'react-router-dom'
 
 function Upcoming() {
     const [reservations, setReservations] = useState<IReservationFull[]>([])
@@ -117,7 +118,7 @@ function HotDesigner() {
             {data &&
                 data.designers.map(
                     (designer): React.ReactNode => (
-                        <StyledLink key={designer.id}>
+                        <StyledLink key={designer.id} to="/user/search/payment" onClick={() => designerStore.getState().setDesigner(designer)}>
                             <Card>
                                 <CardImage src={designer.profileImageURL} alt={designer.name} />
                                 <CardInfo>
@@ -283,7 +284,7 @@ const ReservationInfo = styled.div`
 `
 
 // Link 스타일 지정 (텍스트 데코레이션 제거, 컬러 상속)
-const StyledLink = styled.div`
+const StyledLink = styled(Link)`
     text-decoration: none;
     color: inherit;
 `
@@ -293,13 +294,12 @@ const ReservationCard = styled.div`
     background-color: #35376e;
     color: white;
     border-radius: 1rem;
-    padding: 3.2rem 2.8rem;
+    padding: 3.2rem 2.4rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
     min-width: 24rem;
-    max-width: 24rem;
     min-height: 7rem;
 `
 
@@ -340,11 +340,11 @@ const InfoBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 2rem;
+    padding: 0 3rem;
 `
 
 const InfoLine = styled.div`
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     padding: 0 1rem;
 `
 

@@ -5,7 +5,8 @@ import { userStore } from '../../store/user.ts'
 const MyPageLayout = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 1.6rem;
+    align-items: center;
+    width: 100%;
 `
 
 const InfoContainer = styled.div`
@@ -18,6 +19,7 @@ const InfoContainer = styled.div`
     border-radius: 1.2rem;
     padding: 1.2rem 1.6rem;
     gap: 0.8rem;
+    width: 85%;
 `
 
 const Profile = styled.img`
