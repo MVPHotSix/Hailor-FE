@@ -17,6 +17,9 @@ import PaymentFailure from './pages/payment/paymentFailure.tsx'
 import PaymentSuccess from './pages/payment/paymentSuccess.tsx'
 import PgServer from './pages/payment/pgServer.tsx'
 import NotFound from './pages/notFound.tsx'
+import PaymentConfirmation from './pages/admin/paymentConfirmation.tsx'
+import DesignerList from './pages/admin/designerList.tsx'
+import ReservationList from './pages/admin/reservationList.tsx'
 
 const Layout = styled.div`
     width: 100vw;
@@ -65,7 +68,11 @@ function App() {
                             <Route path="reservation" element={<Reservation />} />
                             <Route path="mypage" element={<MyPage />} />
                         </Route>
-                        <Route path="admin" element={<Admin />} />
+                        <Route path="admin" element={<Admin />}>
+                            <Route index element={<ReservationList />} />
+                            <Route path="designerlist" element={<DesignerList />} />
+                            <Route path="paymentconfirmation" element={<PaymentConfirmation />} />
+                        </Route>
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </BrowserRouter>
