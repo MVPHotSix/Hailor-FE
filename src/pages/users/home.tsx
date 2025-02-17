@@ -9,6 +9,7 @@ import { VITE_SERVER_URL } from '../../config'
 import { getHotDesigners } from '../../api/designer.ts'
 import { Designer } from '../../types/designer.ts'
 import { designerStore } from '../../store/designer.ts'
+import NeedLogin from '../../components/needLogin.tsx'
 
 function Upcoming() {
     const [reservations, setReservations] = useState<IReservationFull[]>([])
@@ -226,6 +227,13 @@ function RecentDesigner() {
 }
 
 function Home() {
+    const { getUser } = userStore()
+    const user = getUser()
+
+    if (!user.name) {
+        return <NeedLogin />
+    }
+
     return (
         <HomeContainer>
             {/* 다가오는 예약 섹션 */}
