@@ -17,7 +17,6 @@ import PaymentFailure from './pages/payment/paymentFailure.tsx'
 import PaymentSuccess from './pages/payment/paymentSuccess.tsx'
 import PgServer from './pages/payment/pgServer.tsx'
 import NotFound from './pages/notFound.tsx'
-import { VITE_SERVER_URL } from './config'
 
 const Layout = styled.div`
     width: 100vw;
@@ -25,7 +24,6 @@ const Layout = styled.div`
 `
 
 function App() {
-    console.log(VITE_SERVER_URL)
     const [queryClient] = useState(
         () =>
             new QueryClient({
