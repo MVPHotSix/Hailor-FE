@@ -232,7 +232,6 @@ function Payment() {
                         data={designer.meetingType.split('/')}
                         selected={selectedType}
                         onClick={(t: string) => {
-                            setStep(1)
                             setDate(date)
                             setType(t)
                         }}
@@ -242,7 +241,6 @@ function Payment() {
                             date={selectedDate}
                             hasInformation={true}
                             setDate={(t: Date) => {
-                                setStep(2)
                                 setTime(-1)
                                 setDate(t)
                             }}
@@ -255,7 +253,6 @@ function Payment() {
                             times={times}
                             selected={timeSlot}
                             setTime={(t: number) => {
-                                setStep(3)
                                 setTime(t)
                             }}
                         />
