@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
 import * as React from 'react'
+import { AdminReservationIcon } from './icon'
 
 // User 페이지용
 const userPages = ['홈', '검색', '내 예약', '마이'] as const
@@ -25,6 +26,11 @@ const adminRoutes: Record<AdminPage, string> = {
     예약조회: '/admin',
     '디자이너 조회': '/admin/designerlist',
     '입금 확인': '/admin/paymentconfirmation',
+}
+const adminIcons: Record<AdminPage, string> = {
+    예약조회: '/어드민_예약.svg',
+    '디자이너 조회': '/어드민_디자이너.svg',
+    '입금 확인': '/어드민_입금.svg',
 }
 
 interface NavigationProps {
@@ -93,6 +99,7 @@ const Navigation: React.FC<NavigationProps> = ({ isAdmin = false }) => {
                     const isActive = location.pathname === to
                     return (
                         <NavItem key={page} to={to} position={(index + 1) * 2}>
+                            <Icon src={adminIcons[page]} active={isActive} />
                             <Text active={isActive} isAdmin={true}>
                                 {page}
                             </Text>
