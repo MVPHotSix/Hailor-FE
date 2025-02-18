@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useGoogleLogin } from '@react-oauth/google'
 import styled from 'styled-components'
 
@@ -117,6 +117,17 @@ function CancelReservation({ id, onClose, type }: { id: number; onClose: () => v
             }).then(() => onClose())
         }
     }
+
+    useEffect(() => {
+        // 현재 body의 overflow 값을 저장합니다.
+        const originalOverflow = document.body.style.overflow
+        // Payment가 나타나면 스크롤을 비활성화합니다.
+        document.body.style.overflow = 'hidden'
+        return () => {
+            // Payment가 사라지면 원래 상태로 복원합니다.
+            document.body.style.overflow = originalOverflow
+        }
+    }, [])
 
     return (
         <div>
