@@ -1,11 +1,11 @@
+import { useState } from 'react'
 import { useGoogleLogin } from '@react-oauth/google'
 import styled from 'styled-components'
 
 import { userStore } from '../store/user.ts'
 import { VITE_SERVER_URL } from '../config'
-import { CrossIcon, GoogleLoginIcon } from './icon'
+import { CrossIcon } from './icon'
 import SelectButton from './buttons/selectButton.tsx'
-import { useState } from 'react'
 
 const GoogleMeetButton = styled.div`
     display: flex;
@@ -56,7 +56,6 @@ const ButtonContainer = styled.div`
     margin-top: 3rem;
 `
 
-
 const ModalContentContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -80,7 +79,7 @@ const BackButtonContainer = styled.div`
     justify-content: end;
 `
 
-function CancelReservation({ id, onClose }: { id: number; onClose: () => void; }) {
+function CancelReservation({ id, onClose }: { id: number; onClose: () => void }) {
     const { getToken } = userStore()
     const [showModal, setShowModal] = useState<boolean>(false)
     const token = getToken()

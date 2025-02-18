@@ -48,7 +48,12 @@ function Upcoming() {
                 const time = today.getHours() * 60 + today.getMinutes()
 
                 const result = res.reservations
-                    .filter(reservation => (reservation.status === 'RESERVED' || reservation.status === 'CONFIRMED') && (date !== reservation.date || (date === reservation.date && time <= (reservation.slot / 2 + 10) * 60 + (reservations % 2 === 0 ? 0 : 30))))
+                    .filter(
+                        reservation =>
+                            (reservation.status === 'RESERVED' || reservation.status === 'CONFIRMED') &&
+                            (date !== reservation.date ||
+                                (date === reservation.date && time <= (reservation.slot / 2 + 10) * 60 + (reservation.slot % 2 === 0 ? 0 : 30))),
+                    )
                     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime() || a.slot - b.slot)
                 console.log(result)
                 setReservations(result)

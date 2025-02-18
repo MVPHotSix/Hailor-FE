@@ -68,7 +68,7 @@ function TimeSelector({ id, date, times, selected, setTime }: Props) {
         const now = new Date()
         const isToday = date === `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getDate()}`
         const slot = new Set([...data.schedule.slot])
-            console.log(isToday, now.getHours() * 60 + now.getMinutes())
+        console.log(isToday, now.getHours() * 60 + now.getMinutes())
         const temp = times.map((t, i) => ({
             ...t,
             booked: slot.has(i) || (isToday && now.getHours() * 60 + now.getMinutes() >= (10 + t.index / 2) * 60 + (t.index % 2 === 0 ? 0 : 30)),

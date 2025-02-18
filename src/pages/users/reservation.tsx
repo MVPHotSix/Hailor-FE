@@ -37,7 +37,12 @@ function ReservationComponent() {
                 const time = today.getHours() * 60 + today.getMinutes()
 
                 const result = res.reservations
-                    .filter(reservation => (reservation.status === 'RESERVED' || reservation.status === 'CONFIRMED') && (date !== reservation.date || (date === reservation.date && time <= (reservation.slot / 2 + 10) * 60 + (reservations % 2 === 0 ? 0 : 30))))
+                    .filter(
+                        reservation =>
+                            (reservation.status === 'RESERVED' || reservation.status === 'CONFIRMED') &&
+                            (date !== reservation.date ||
+                                (date === reservation.date && time <= (reservation.slot / 2 + 10) * 60 + (reservation.slot % 2 === 0 ? 0 : 30))),
+                    )
                     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime() || a.slot - b.slot)
                 console.log(result)
                 setReservations(result)
@@ -137,7 +142,7 @@ function ReservationComponent() {
                         </InfoBox>
                     )}
                     <InfoBox>
-                        <GoogleOAuthProvider clientId={googleClientId} >
+                        <GoogleOAuthProvider clientId={googleClientId}>
                             <CancelReservation id={reservations[0].id} onClose={() => setRefetch(!refetch)} />
                         </GoogleOAuthProvider>
                     </InfoBox>
@@ -310,20 +315,4 @@ const NoReservationText = styled.div`
     font-size: 2rem;
     color: rgba(55, 55, 110, 1);
     font-weight: bold;
-`
-
-const CancelButton = styled.button`
-    padding: 1rem 2rem;
-    background-color: #ff4d4d;
-    color: #fff;
-    font-size: 1.6rem;
-    font-weight: bold;
-    border: none;
-    border-radius: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-        background-color: #e04343;
-    }
 `
