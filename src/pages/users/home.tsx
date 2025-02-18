@@ -43,11 +43,16 @@ function Upcoming() {
                     reservations: IReservationFull[]
                 }
                 console.log(res)
+                const today = new Date()
+                const date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${today.getDate()}`
+                const time = today.getHours() * 60 + today.getMinutes()
+
                 const result = res.reservations
-                    .filter(reservation => reservation.status === 'RESERVED' || reservation.status === 'CONFIRMED')
-                    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                    .filter(reservation => (reservation.status === 'RESERVED' || reservation.status === 'CONFIRMED') && (date !== reservation.date || (date === reservation.date && time <= (reservation.slot / 2 + 10) * 60 + (reservations % 2 === 0 ? 0 : 30))))
+                    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime() || a.slot - b.slot)
+                console.log(result)
                 setReservations(result)
-                setTimeout(() => setLoading(false), 500)
+                setLoading(false)
             })
     }, [token])
 

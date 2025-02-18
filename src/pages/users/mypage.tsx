@@ -7,6 +7,7 @@ const MyPageLayout = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
+    padding-top: 2rem;
 `
 
 const InfoContainer = styled.div`

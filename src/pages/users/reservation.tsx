@@ -8,7 +8,7 @@ import { googleClientId, VITE_SERVER_URL } from '../../config'
 import { IReservationFull } from '../../types/reservation.ts'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import MakeMeet from '../../components/makeMeet.tsx'
-import { cancelReservation } from '../../api/reservation.ts'
+import CancelReservation from '../../components/cancelReservation.tsx'
 
 function ReservationComponent() {
     const [reservations, setReservations] = useState<IReservationFull[]>([])
@@ -32,9 +32,14 @@ function ReservationComponent() {
                     reservations: IReservationFull[]
                 }
                 console.log(res)
+                const today = new Date()
+                const date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${today.getDate()}`
+                const time = today.getHours() * 60 + today.getMinutes()
+
                 const result = res.reservations
-                    .filter(reservation => reservation.status === 'RESERVED' || reservation.status === 'CONFIRMED')
-                    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                    .filter(reservation => (reservation.status === 'RESERVED' || reservation.status === 'CONFIRMED') && (date !== reservation.date || (date === reservation.date && time <= (reservation.slot / 2 + 10) * 60 + (reservations % 2 === 0 ? 0 : 30))))
+                    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime() || a.slot - b.slot)
+                console.log(result)
                 setReservations(result)
                 setLoading(false)
             })
@@ -62,21 +67,6 @@ function ReservationComponent() {
     const getDay = (date: string): string => {
         const formatting = ['일', '월', '화', '수', '목', '금', '토']
         return formatting[new Date(date).getDay()]
-    }
-
-    // 예약취소 핸들러
-    const handleCancelReservation = async () => {
-        if (window.confirm('예약을 취소하시겠습니까?')) {
-            try {
-                await cancelReservation(reservations[0].id, token)
-                alert('예약이 취소되었습니다.')
-                // 취소 후 필요한 UI 업데이트나 페이지 이동 처리
-            } catch (error) {
-                console.error('예약 취소 실패:', error)
-                console.log(reservations[0].id)
-                alert('예약 취소에 실패하였습니다.')
-            }
-        }
     }
 
     if (isLoading) {
@@ -147,7 +137,9 @@ function ReservationComponent() {
                         </InfoBox>
                     )}
                     <InfoBox>
-                        <CancelButton onClick={handleCancelReservation}>예약 취소</CancelButton>
+                        <GoogleOAuthProvider clientId={googleClientId} >
+                            <CancelReservation id={reservations[0].id} onClose={() => setRefetch(!refetch)} />
+                        </GoogleOAuthProvider>
                     </InfoBox>
                 </InfoBoxesContainer>
             </FormContainer>
