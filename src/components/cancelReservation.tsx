@@ -27,8 +27,8 @@ const GoogleMeetText = styled.span`
 `
 
 const ModalLayout = styled.div`
-    position: absolute;
-    top: 0;
+    position: fixed;
+    top: 5rem;
     left: 0;
     background: rgba(41, 41, 41, 0.8);
     width: 100%;
@@ -46,6 +46,7 @@ const Modal = styled.div`
     border-radius: 1.6rem;
     min-width: 50%;
     max-width: 80%;
+    margin-bottom: 10rem;
 `
 
 const ButtonContainer = styled.div`
