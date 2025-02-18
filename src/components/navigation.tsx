@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
 import * as React from 'react'
-import { AdminReservationIcon } from './icon'
 
 // User 페이지용
 const userPages = ['홈', '검색', '내 예약', '마이'] as const
@@ -20,17 +19,17 @@ const userIcons: Record<UserPage, string> = {
 }
 
 // Admin 페이지용
-const adminPages = ['예약조회', '디자이너 조회', '입금 확인'] as const
+const adminPages = ['예약조회', '디자이너 조회', '디자이너 추가'] as const
 export type AdminPage = (typeof adminPages)[number]
 const adminRoutes: Record<AdminPage, string> = {
     예약조회: '/admin',
-    '디자이너 조회': '/admin/designerlist',
-    '입금 확인': '/admin/paymentconfirmation',
+    '디자이너 조회': '/admin/designer-list',
+    '디자이너 추가': '/admin/designer-add',
 }
 const adminIcons: Record<AdminPage, string> = {
     예약조회: '/어드민_예약.svg',
     '디자이너 조회': '/어드민_디자이너.svg',
-    '입금 확인': '/어드민_입금.svg',
+    '디자이너 추가': '/어드민_추가.svg',
 }
 
 interface NavigationProps {

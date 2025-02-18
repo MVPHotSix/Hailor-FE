@@ -35,6 +35,7 @@ const AdminNavigate = styled.div`
     padding: 1.2rem 1.6rem;
     margin: 2rem 0;
     gap: 0.8rem;
+    width: 85%;
 `
 
 const Profile = styled.img`

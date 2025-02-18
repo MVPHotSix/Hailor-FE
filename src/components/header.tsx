@@ -53,9 +53,9 @@ const BackToUser = styled.div`
     right: 1rem;
     top: 0.6rem;
     font-size: 1.2rem;
-    background-color: #a0a096;
+    background-color: #e6e6e6;
     border-radius: 1.2rem;
-    color: #FFFFFF;
+    color: rgba(41, 41, 89, 1);
     padding: 1rem 2rem;
 `
 
