@@ -80,11 +80,11 @@ const BackButtonContainer = styled.div`
     justify-content: end;
 `
 
-function CancelReservation({ id, onClose }: { id: number; onClose: () => void }) {
+function CancelReservation({ id, onClose, type }: { id: number; onClose: () => void; type: string }) {
     const { getToken } = userStore()
     const [showModal, setShowModal] = useState<boolean>(false)
     const token = getToken()
-    const onClick = useGoogleLogin({
+    const googleLogin = useGoogleLogin({
         scope: 'https://www.googleapis.com/auth/calendar.app.created https://www.googleapis.com/auth/calendar.calendarlist.readonly',
         onSuccess: codeResponse => {
             console.log(codeResponse)
@@ -103,6 +103,20 @@ function CancelReservation({ id, onClose }: { id: number; onClose: () => void })
             console.log(errorResponse)
         },
     })
+
+    const onClick = () => {
+        if (type === 'ONLINE') {
+            googleLogin()
+        } else {
+            fetch(`${VITE_SERVER_URL}/api/v1/reservation/{id}?id=${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            }).then(() => onClose())
+        }
+    }
 
     return (
         <div>
