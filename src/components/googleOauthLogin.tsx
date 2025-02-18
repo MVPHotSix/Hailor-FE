@@ -204,7 +204,7 @@ function GoogleOauthLogin() {
                             .then(response => response.json())
                             .then(data => {
                                 if (data.accessToken) {
-                                    setShowModal(true)
+                                    setToken(data)
                                 } else {
                                     setShowModal(true)
                                     setCredential(credentialResponse.credential as string)
